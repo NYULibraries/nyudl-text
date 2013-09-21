@@ -1,26 +1,26 @@
 require 'spec_helper'
 
-describe Text::Filename do
+describe Nyudl::Text::Filename do
 
 
   context "when object is instantiated" do
-    subject { Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14') }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14') }
 
-    its(:class) { should == Text::Filename }
+    its(:class) { should == Nyudl::Text::Filename }
     it { should be_recognized }
     it { should be_rename    }
     its(:newname) { should == 'mss092_ref14_n000068_m.tif'}
   end
 
   context "when prefix does not match" do
-    subject { Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_14') }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_14') }
 
     it { should_not be_recognized }
     its(:rename?) { should be_nil }
   end
 
   context "when filename is already correct" do
-    subject { Text::Filename.new('mss092_ref14_n000068_m.tif', 'mss092_ref14') }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_n000068_m.tif', 'mss092_ref14') }
 
     it { should be_recognized }
     it { should_not be_rename }
@@ -31,7 +31,7 @@ describe Text::Filename do
 
 
   context "when filename has only three digits for page number" do
-    subject { Text::Filename.new('ifa_egypt0018_017m.tif', 'ifa_egypt0018') }
+    subject { Nyudl::Text::Filename.new('ifa_egypt0018_017m.tif', 'ifa_egypt0018') }
 
     it { should be_recognized }
     it { should be_rename }
@@ -39,7 +39,7 @@ describe Text::Filename do
   end
 
   context "when filename has only three digits for page number and an insert" do
-    subject { Text::Filename.new('ifa_egypt0018_017_20d.tif', 'ifa_egypt0018') }
+    subject { Nyudl::Text::Filename.new('ifa_egypt0018_017_20d.tif', 'ifa_egypt0018') }
 
     it { should be_recognized }
     it { should be_rename }
@@ -47,7 +47,7 @@ describe Text::Filename do
   end
 
   context "when filename has only three digits for page number and an oversize" do
-    subject { Text::Filename.new('ifa_egypt0018_017_20_10d.tif', 'ifa_egypt0018') }
+    subject { Nyudl::Text::Filename.new('ifa_egypt0018_017_20_10d.tif', 'ifa_egypt0018') }
 
     it { should be_recognized }
     it { should be_rename }
@@ -55,7 +55,7 @@ describe Text::Filename do
   end
 
   context "when filename has only three digits for page number and an oversize" do
-    subject { Text::Filename.new('ifa_egypt0018_017_20_10d.tif', 'ifa_egypt0018') }
+    subject { Nyudl::Text::Filename.new('ifa_egypt0018_017_20_10d.tif', 'ifa_egypt0018') }
 
     it { should be_recognized }
     it { should be_rename }
@@ -66,13 +66,13 @@ describe Text::Filename do
   #-----------------------------------------------------------------
 
   context "when using back matter with 3 digits in input filename" do
-    subject { Text::Filename.new('mss092_ref14_bk001d.tif', 'mss092_ref14', :bk_digits_max => 2) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_bk001d.tif', 'mss092_ref14', :bk_digits_max => 2) }
 
     it { should_not be_recognized }
   end
 
   context "when using back matter with 3 digits in input filename" do
-    subject { Text::Filename.new('mss092_ref14_bk001d.tif', 'mss092_ref14', :bk_digits_max => 3, :bk_digits_out => 3) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_bk001d.tif', 'mss092_ref14', :bk_digits_max => 3, :bk_digits_out => 3) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -80,7 +80,7 @@ describe Text::Filename do
   end
 
   context "when using back matter coercing to 3 digits in output filename" do
-    subject { Text::Filename.new('mss092_ref14_bk01d.tif', 'mss092_ref14', :bk_digits_out => 3) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_bk01d.tif', 'mss092_ref14', :bk_digits_out => 3) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -88,7 +88,7 @@ describe Text::Filename do
   end
 
   context "when using back matter and insert coercing to 3 digits in output filename" do
-    subject { Text::Filename.new('mss092_ref14_bk01_01d.tif', 'mss092_ref14', :bk_digits_out => 3) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_bk01_01d.tif', 'mss092_ref14', :bk_digits_out => 3) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -96,7 +96,7 @@ describe Text::Filename do
   end
 
   context "when using back matter and oversize coercing to 3 digits in output filename" do
-    subject { Text::Filename.new('mss092_ref14_bk01_02_01d.tif', 'mss092_ref14', :bk_digits_out => 3) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_bk01_02_01d.tif', 'mss092_ref14', :bk_digits_out => 3) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -108,13 +108,13 @@ describe Text::Filename do
 
 
   context "when using front matter with 3 digits in input filename" do
-    subject { Text::Filename.new('mss092_ref14-fr001d.tif', 'mss092_ref14', :fr_digits_max => 2) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14-fr001d.tif', 'mss092_ref14', :fr_digits_max => 2) }
 
     it { should_not be_recognized }
   end
 
   context "when using front matter with 3 digits in input filename" do
-    subject { Text::Filename.new('mss092_ref14-fr001d.tif', 'mss092_ref14', :fr_digits_max => 3, :fr_digits_out => 3) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14-fr001d.tif', 'mss092_ref14', :fr_digits_max => 3, :fr_digits_out => 3) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -122,7 +122,7 @@ describe Text::Filename do
   end
 
   context "when using front matter coercing to 3 digits in output filename" do
-    subject { Text::Filename.new('mss092_ref14-fr01d.tif', 'mss092_ref14', :fr_digits_out => 3) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14-fr01d.tif', 'mss092_ref14', :fr_digits_out => 3) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -131,7 +131,7 @@ describe Text::Filename do
 
 
   context "when using front matter and insert coercing to 3 digits in output filename" do
-    subject { Text::Filename.new('mss092_ref14-fr01_01d.tif', 'mss092_ref14', :fr_digits_out => 3) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14-fr01_01d.tif', 'mss092_ref14', :fr_digits_out => 3) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -139,7 +139,7 @@ describe Text::Filename do
   end
 
   context "when using front matter and oversize coercing to 3 digits in output filename" do
-    subject { Text::Filename.new('mss092_ref14-fr01_02_01d.tif', 'mss092_ref14', :fr_digits_out => 3) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14-fr01_02_01d.tif', 'mss092_ref14', :fr_digits_out => 3) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -153,14 +153,14 @@ describe Text::Filename do
   #-----------------------------------------------------------------
 
   context "when new_prefix is nil" do
-    subject { Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14', :new_prefix => nil) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14', :new_prefix => nil) }
 
     its(:newname) { should == 'mss092_ref14_n000068_m.tif'}
   end
 
 
   context "when using new_prefix option with correct filename" do
-    subject { Text::Filename.new('mss092_ref14_n000068_m.tif', 'mss092_ref14', :new_prefix => 'foo') }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_n000068_m.tif', 'mss092_ref14', :new_prefix => 'foo') }
 
     it { should be_recognized }
     its(:newname) { should == 'foo_n000068_m.tif'}
@@ -168,7 +168,7 @@ describe Text::Filename do
   end
 
   context "when new_prefix is nil" do
-    subject { Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14', :new_prefix => nil) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14', :new_prefix => nil) }
 
     it { should be_recognized }
     its(:newname) { should == 'mss092_ref14_n000068_m.tif'}
@@ -177,20 +177,20 @@ describe Text::Filename do
 
 
   context "when using an invalid filename" do
-    subject { Text::Filename.new('mss092_ref14_axnasdflasdf.tif', 'mss092_ref14') }
+    subject { Nyudl::Text::Filename.new('mss092_ref14_axnasdflasdf.tif', 'mss092_ref14') }
 
     it { should_not be_recognized }
   end
 
   context "when using a PASSING regression-test filename" do
-    subject { Text::Filename.new('woj_ref22_000078_07_d.tif', 'woj_ref22') }
+    subject { Nyudl::Text::Filename.new('woj_ref22_000078_07_d.tif', 'woj_ref22') }
 
     it { should be_recognized }
     its(:newname) { should == 'woj_ref22_n000078_z07_d.tif'}
   end
 
   context "when README.txt file is found" do
-    subject { Text::Filename.new('README.txt', 'mss092_ref14') }
+    subject { Nyudl::Text::Filename.new('README.txt', 'mss092_ref14') }
 
     it { should be_recognized }
     it { should_not be_rename }
@@ -202,14 +202,14 @@ describe Text::Filename do
   # would be written 010.  Need to implement fix to strip leading zeros...
   # http://www.ruby-forum.com/topic/62141
   context "when using a FAILING regression-test filename" do
-    subject { Text::Filename.new('woj_ref22_000078_08_d.tif', 'woj_ref22') }
+    subject { Nyudl::Text::Filename.new('woj_ref22_000078_08_d.tif', 'woj_ref22') }
 
     it { should be_recognized }
     its(:newname) { should == 'woj_ref22_n000078_z08_d.tif'}
   end
 
   context "when using a FAILING regression-test filename" do
-    subject { Text::Filename.new('woj_ref22_000058_08_08_d.tif', 'woj_ref22') }
+    subject { Nyudl::Text::Filename.new('woj_ref22_000058_08_08_d.tif', 'woj_ref22') }
 
     it { should be_recognized }
     its(:newname) { should == 'woj_ref22_n000058_z08_z08_d.tif'}
@@ -220,13 +220,13 @@ describe Text::Filename do
   # should not be recognized, then when tested with increased max digits should be OK
 
   context "when using insert with 3 digits in input filename" do
-    subject { Text::Filename.new('mss092_ref14-fr01_999d.tif', 'mss092_ref14') }
+    subject { Nyudl::Text::Filename.new('mss092_ref14-fr01_999d.tif', 'mss092_ref14') }
 
     it { should_not be_recognized }
   end
 
   context "when using insert with 3 digits in input filename and larger max digits and output digits" do
-    subject { Text::Filename.new('mss092_ref14-fr01_999d.tif', 'mss092_ref14', :in_digits_max => 3, :in_digits_out => 4) }
+    subject { Nyudl::Text::Filename.new('mss092_ref14-fr01_999d.tif', 'mss092_ref14', :in_digits_max => 3, :in_digits_out => 4) }
 
     it { should be_recognized }
     it { should be_rename }
@@ -268,7 +268,7 @@ describe Text::Filename do
     "mss092_ref14_zbk01_z08_z08_m.tif"   => "mss092_ref14_zbk01_z08_z08_m.tif"
   }.each_pair do |k,v|
     context "when using known filename patterns" do
-      subject(:fname) { Text::Filename.new(k, prefix) }
+      subject(:fname) { Nyudl::Text::Filename.new(k, prefix) }
       it { should be_recognized }
       its(:newname) { should == v }
     end

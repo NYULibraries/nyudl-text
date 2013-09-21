@@ -1,28 +1,28 @@
 # this is the beginning of refactoring
-module Text
-  class Base
-    def initialize
-      true
-      # analyze
-      # errors
-      # rename?
-      # rename!
-      # renames
-      # recognized?
-      # struct (class. initializer takes hash of renamed files) 
-      # 
-      # analyze directory
-      # analyze filenames
-      # 
+module Nyudl
+  module Text
+    class Base
+      def initialize
+        true
+        # initialize with directory path
+        # valid?
+        # validate
+        # errors
+        # struct
+        # rename?
+        # rename!
+        # renames --> list of files to rename
+
 
 =begin
-open directory
-analyze files
+           open directory
+           analyze files
 
 
 
 =end
 
+      end
     end
   end
 end
