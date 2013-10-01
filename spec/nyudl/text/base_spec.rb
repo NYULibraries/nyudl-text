@@ -2,10 +2,17 @@ require 'spec_helper'
 
 describe Nyudl::Text::Base do
   context "when an object is instantiated" do
-    subject { Nyudl::Text::Base.new() }
+    subject { Nyudl::Text::Base.new('.', 'b') }
 
     its(:class) { should == Nyudl::Text::Base }
   end
+
+
+  context "when text is valid" do
+    it "#check returns true"
+    it "#rename? returns false"
+  end
+
   context "when some files need renaming" do
     it "#rename! only files requiring rename"
     it "#renames returns empty hash when there are no renames"

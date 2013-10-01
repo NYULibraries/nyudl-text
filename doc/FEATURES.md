@@ -2,11 +2,13 @@ Gem functionality:
 nyudl-<object type>
 * initialize with directory path
 * valid?
-* validate
+* recognized?
 * errors
+  :unrecognized_files
 * struct
 * rename?
-* rename!
 * rename_plan
+* rename!
+* check
 
 
