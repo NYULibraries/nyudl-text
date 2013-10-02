@@ -56,35 +56,53 @@ module Nyudl
       #   Raises ArgumentError if the dir argument is not a directory or if
       #     the current process cannot list/access the files in the directory.
       def initialize(dir, prefix, options = {})
-        raise ArgumentError, "#{dir} must be a directory" unless File.directory?(dir)
-        raise ArgumentError, "cannot read contents of directory #{dir}" unless File.executable?(dir)
-        @dir     = dir.dup
-        @options = options.clone
-        @errors  = []
+        @dir     = dir
+        @options = options
+        @errors  = Hash.new { |_h, k| _h[k] = [] }
         # nil values indicate "undetermined state"
         @valid   = nil
-        @rename  = nil
-        @rename_plan = nil
+        @renames     = {}
+        @names       = {}
         @struct      = nil
-        @analysis    = _analyze_text
+        @analysis    = nil
       end
 
+      #   Returns true if text is valid, false otherwise.
+      #     The definition of valid is that the errors array is empty after all
+      #     checks have been performed.
+      #   Raises ArgumentError if the dir argument is not a directory or if
+      #     the current process cannot list/access the files in the directory.
       def valid?
+        raise ArgumentError, "#{@dir} must be a directory" unless File.directory?(@dir)
+        raise ArgumentError, "cannot read contents of directory #{@dir}" unless File.executable?(@dir)
+
+        analyze_text
+
+        # valid if:
+        #   no renaming required
+        #   errors hash is empty
+        !!self.rename? && self.errors.empty?
       end
-      def errors
-        @errors
+      #   Returns true if text is valid, false otherwise.
+      #     The definition of valid is that the errors array is empty after all
+      #     checks have been performed.
+      #   Raises ArgumentError if the dir argument is not a directory or if
+      #     the current process cannot list/access the files in the directory.
+      def recognized?
+        # true if all files recognized
+      end
+
+      def errors(key = nil)
+        key.nil? ? @errors : @errors[key]
       end
       def rename?
-        @rename
+        @renames.empty?
       end
       def rename!
-        _execute_rename_plan
+        execute_rename_plan
       end
       def rename_plan
-        @rename_plan
-      end
-
-      def check
+        @renames
       end
 
       private
@@ -94,9 +112,28 @@ module Nyudl
       #
       # Returns nothing.
       # Raises  nothing.
-      def _analyze_text
+      def analyze_text
+        Dir.foreach(@dir) do |f|
+          next if (f == '.' || f == '..')
+
+          @errors[:structure] << "error: found a subdirectory. cannot process." if File.directory?(f)
+
+          i = Text::Filename.new(f, prefix, options)
+
+          @errors[:unrecognized] << "#{File.join(dir,i.fname)}" unless i.recognized?
+
+          # only add to hash if rename is required
+          @renames[i.newname] = i if i.rename?
+          @names[i.newname] = i
+          printf("%30s   ->   %30s\n", i.fname, i.newname) if i.rename?
+          # add to all_names hash for sequence check later
+          #all_names[i.newname] = i
+        end
+
       end
 
+      def execute_rename_plan
+      end
     end
   end
 end
