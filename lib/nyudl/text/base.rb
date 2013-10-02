@@ -56,15 +56,14 @@ module Nyudl
       #   Raises ArgumentError if the dir argument is not a directory or if
       #     the current process cannot list/access the files in the directory.
       def initialize(dir, prefix, options = {})
-        @dir     = dir
-        @options = options
-        @errors  = Hash.new { |_h, k| _h[k] = [] }
+        @dir      = dir
+        @options  = options
+        @errors   = Hash.new { |_h, k| _h[k] = [] }
         # nil values indicate "undetermined state"
-        @valid   = nil
-        @renames     = {}
-        @names       = {}
-        @struct      = nil
-        @analysis    = nil
+        @valid    = nil
+        @renames  = {}
+        @names    = {}
+        @analyzed = false
       end
 
       #   Returns true if text is valid, false otherwise.
@@ -73,16 +72,17 @@ module Nyudl
       #   Raises ArgumentError if the dir argument is not a directory or if
       #     the current process cannot list/access the files in the directory.
       def valid?
+        !!self.rename? && self.errors.empty?
+      end
+
+      def analyze
         raise ArgumentError, "#{@dir} must be a directory" unless File.directory?(@dir)
         raise ArgumentError, "cannot read contents of directory #{@dir}" unless File.executable?(@dir)
 
         analyze_text
-
-        # valid if:
-        #   no renaming required
-        #   errors hash is empty
-        !!self.rename? && self.errors.empty?
+        @analyzed = true
       end
+
       #   Returns true if text is valid, false otherwise.
       #     The definition of valid is that the errors array is empty after all
       #     checks have been performed.
@@ -104,6 +104,9 @@ module Nyudl
       def rename_plan
         @renames
       end
+      def analyzed?
+        @analyzed
+      end
 
       private
 
@@ -118,18 +121,14 @@ module Nyudl
 
           @errors[:structure] << "error: found a subdirectory. cannot process." if File.directory?(f)
 
-          i = Text::Filename.new(f, prefix, options)
+          i = Nyudl::Text::Filename.new(f, prefix, options)
 
           @errors[:unrecognized] << "#{File.join(dir,i.fname)}" unless i.recognized?
 
           # only add to hash if rename is required
           @renames[i.newname] = i if i.rename?
-          @names[i.newname] = i
-          printf("%30s   ->   %30s\n", i.fname, i.newname) if i.rename?
-          # add to all_names hash for sequence check later
-          #all_names[i.newname] = i
+          @names[i.newname]   = i
         end
-
       end
 
       def execute_rename_plan
