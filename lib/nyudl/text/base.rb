@@ -57,6 +57,7 @@ module Nyudl
       #     the current process cannot list/access the files in the directory.
       def initialize(dir, prefix, options = {})
         @dir      = dir
+        @prefix   = prefix
         @options  = options
         @errors   = Hash.new { |_h, k| _h[k] = [] }
         # nil values indicate "undetermined state"
@@ -72,7 +73,7 @@ module Nyudl
       #   Raises ArgumentError if the dir argument is not a directory or if
       #     the current process cannot list/access the files in the directory.
       def valid?
-        !!self.rename? && self.errors.empty?
+        analyzed? ? (!!self.rename? && self.errors.empty?) : nil
       end
 
       def analyze
@@ -96,7 +97,7 @@ module Nyudl
         key.nil? ? @errors : @errors[key]
       end
       def rename?
-        @renames.empty?
+        !!@renames.empty?
       end
       def rename!
         execute_rename_plan
@@ -121,9 +122,9 @@ module Nyudl
 
           @errors[:structure] << "error: found a subdirectory. cannot process." if File.directory?(f)
 
-          i = Nyudl::Text::Filename.new(f, prefix, options)
+          i = Nyudl::Text::Filename.new(f, @prefix, @options)
 
-          @errors[:unrecognized] << "#{File.join(dir,i.fname)}" unless i.recognized?
+          @errors[:unrecognized] << "#{File.join(@dir,i.fname)}" unless i.recognized?
 
           # only add to hash if rename is required
           @renames[i.newname] = i if i.rename?

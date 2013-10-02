@@ -4,3 +4,4 @@ test/target
 Gemfile.lock
 .ruby-version
 .ruby-gemset
+*.gem
