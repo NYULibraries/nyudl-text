@@ -59,7 +59,7 @@ module Nyudl
         @dir      = dir
         @prefix   = prefix
         @options  = options
-        @errors   = Hash.new { |_h, k| _h[k] = [] }
+        @errors   = nil
         # nil values indicate "undetermined state"
         @valid    = nil
         @renames  = {}
@@ -89,10 +89,6 @@ module Nyudl
       #     checks have been performed.
       #   Raises ArgumentError if the dir argument is not a directory or if
       #     the current process cannot list/access the files in the directory.
-      def recognized?
-        # true if all files recognized
-      end
-
       def errors(key = nil)
         key.nil? ? @errors : @errors[key]
       end
@@ -117,6 +113,15 @@ module Nyudl
       # Returns nothing.
       # Raises  nothing.
       def analyze_text
+        @errors = Hash.new { |_h, k| _h[k] = [] }
+
+        Dir.chdir(@dir) do
+          if Dir.glob('*').length == 0
+            @errors[:structure] << "No files found in #{@dir}."
+            return false
+          end
+        end
+
         Dir.foreach(@dir) do |f|
           next if (f == '.' || f == '..')
 
@@ -133,6 +138,13 @@ module Nyudl
       end
 
       def execute_rename_plan
+        raise "Cannot rename.  Text not analyzed." unless analyzed?
+        raise "Cannot rename.  Errors detected."   unless @errors.empty?
+        @renames.keys.sort.each do |k|
+          FileUtils.mv(File.join(@dir, @renames[k].fname),
+                       File.join(@dir, @renames[k].newname),
+                       :verbose => @options[:verbose], :noop => @options[:noop])
+        end
       end
     end
   end
@@ -228,7 +240,7 @@ module CCGUtil
 
 
       unless errors.empty?
-        puts "ERRORS DETECTED.\n#{errors.join("\n")}\n\nPLEASE CORRECT ERRORS AND RUN AGAIN...\n" 
+        puts "ERRORS DETECTED.\n#{errors.join("\n")}\n\nPLEASE CORRECT ERRORS AND RUN AGAIN...\n"
         puts "OPERATION ABORTED"
         puts "-------------------------------------------------------------------------------"
         exit 1
