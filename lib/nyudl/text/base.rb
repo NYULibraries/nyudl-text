@@ -52,12 +52,13 @@ module Nyudl
       #   Nyudl::Text::Base.new('/content/nyu_aco000001', 'nyu_aco000001',
       #                         {:new_prefix => nyu_aco000002})
       #
-      # Returns/Raises:
-      #
-      #   Returns nothing.
-      #   Raises ArgumentError if the dir argument is not a directory or if
-      #     the current process cannot list/access the files in the directory.
+      # Returns nothing.
+      # Raises ArgumentError if the dir argument is not a directory or if
+      #   the current process cannot list/access the files in the directory.
       def initialize(dir, prefix, options = {})
+        raise ArgumentError, "#{dir} must be a directory" unless File.directory?(dir)
+        raise ArgumentError, "cannot read contents of directory #{dir}" unless File.executable?(dir)
+
         @dir      = dir
         @prefix   = prefix
         @options  = options
@@ -69,22 +70,61 @@ module Nyudl
         @analyzed = false
       end
 
-      #   Returns true if text is valid, false otherwise.
-      #     The definition of valid is that the errors array is empty after all
-      #     checks have been performed.
-      #   Raises ArgumentError if the dir argument is not a directory or if
-      #     the current process cannot list/access the files in the directory.
+      # Public: Indicates whether or not text is valid.
+      #
+      # Examples
+      #
+      #   valid?
+      #   # => true
+      #
+      #   valid?
+      #   # => false
+      #
+      #   valid?
+      #   # => nil
+      #
+      # Returns Boolean true when text passed all checks.
+      # Returns Boolean false when text failed any checks.
+      # Returns NilClass nil if method called before analyze
       def valid?
         analyzed? ? (!!self.rename? && self.errors.empty?) : nil
       end
 
-      def analyze
-        raise ArgumentError, "#{@dir} must be a directory" unless File.directory?(@dir)
-        raise ArgumentError, "cannot read contents of directory #{@dir}" unless File.executable?(@dir)
 
+      # Public: Runs analyses on the text.
+      #
+      # Examples
+      #
+      #   analyze
+      #   # => nil
+      #
+      # Returns nil at all times.
+      def analyze
         analyze_text
         @analyzed = true
+        nil
       end
+
+      # Public: This method returns the errors Hash.
+      #         The errors Hash is a Hash of Arrays.
+      #
+      # key   - The Symbol used to select a subset of the errors Hash
+      #         (default: nil). When key is present, the method returns
+      #         the Array of errors for that key. If key is not supplied
+      #         the entire errors Hash is returned.
+      #
+      # Examples
+      #
+      #   errors
+      #   # => {:foo => ['foo was missing from bar'],
+      #         :baz => ['baz not declared for quux']}
+      #
+      #   errors(:baz)
+      #   # => ['baz not declared for quux']
+      #
+      # Returns errors Hash if key not supplied.
+      # Returns Array of error Strings for key if key supplied.
+      #
 
       #   Returns true if text is valid, false otherwise.
       #     The definition of valid is that the errors array is empty after all

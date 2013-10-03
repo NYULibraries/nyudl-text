@@ -1,3 +1,6 @@
+require 'fakefs/spec_helpers'
+require 'fileutils'
+
 %w(
    base
    sequence_checker
@@ -9,6 +12,10 @@
    page_number
    echo
 ).each { |f| require_relative(File.join('..','lib','nyudl','text', f)) }
+
+RSpec.configure do |config|
+  config.include FakeFS::SpecHelpers, fakefs: true
+end
 
 =begin
 RSpec.configure do |config|
