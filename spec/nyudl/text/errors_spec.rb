@@ -88,5 +88,28 @@ describe Nyudl::Text::Errors do
       e.on(:foo).should == ['bar']
     end
   end
+
+  describe "#empty?" do
+
+    context "before errors are added" do
+      subject(:e) { Nyudl::Text::Errors.new() }
+      it "returns true" do
+        e.empty?.should be_true
+      end
+    end
+
+    context "after errors are added" do
+      subject(:e) {
+        eo = Nyudl::Text::Errors.new()
+        eo.add(:foo, 'bar')
+        eo.add(:baz, 'quux')
+        eo
+      }
+
+      it "returns false" do
+        e.empty?.should be_false
+      end
+    end
+  end
 end
 

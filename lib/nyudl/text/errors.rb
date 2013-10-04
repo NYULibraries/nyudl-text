@@ -6,7 +6,7 @@ module Nyudl
       end
       def add(key, message)
         k = convert_key(key)
-        @errors[k] = [ ] if @errors[k].nil?
+        @errors[k] = [] if @errors[k].nil?
         @errors[k] << message
       end
       def on(key)
@@ -14,6 +14,9 @@ module Nyudl
       end
       def all
         @errors
+      end
+      def empty?
+        @errors.values.inject(true) {|memo, value| memo && value.empty?}
       end
       private
       def convert_key(key)

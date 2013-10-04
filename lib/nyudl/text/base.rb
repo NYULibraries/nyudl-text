@@ -62,8 +62,7 @@ module Nyudl
         @dir      = dir
         @prefix   = prefix
         @options  = options
-#        @errors   = Nyudl::Text::Errors.new
-        @errors   = nil
+        @errors   = Nyudl::Text::Errors.new
         # nil values indicate "undetermined state"
         @valid    = nil
         @renames  = {}
@@ -130,11 +129,9 @@ module Nyudl
       # Returns errors Hash if key not supplied.
       # Returns Array of error Strings for key if key supplied.
       def errors(key = nil)
-        key.nil? ? @errors : @errors[key]
+        # always return nil if text not analyzed
+        analyzed? ? (key.nil? ? @errors.all : @errors.on(key)) : nil
       end
-      # def errors(key)
-      #   @errors.on(key)
-      # end
       def rename?
         !@renames.empty?
       end
@@ -161,13 +158,12 @@ module Nyudl
       # Raises  nothing.
       def analyze_text
         reset_analyzed
-        @errors  = Hash.new { |_h, k| _h[k] = [] }
         @renames = {}
         @names   = {}
 
         Dir.chdir(@dir) do
           if Dir.glob('*').length == 0
-            @errors[:structure] << "No files found in #{@dir}."
+            @errors.add(:structure, "No files found in #{@dir}.")
             return
           end
         end
@@ -175,11 +171,11 @@ module Nyudl
         Dir.foreach(@dir) do |f|
           next if (f == '.' || f == '..')
 
-          @errors[:structure] << "error: found a subdirectory. cannot process." if File.directory?(f)
+          @errors.add(:structure, "error: found a subdirectory. cannot process.") if File.directory?(f)
 
           i = Nyudl::Text::Filename.new(f, @prefix, @options)
 
-          @errors[:unrecognized] << "#{File.join(@dir,i.fname)}" unless i.recognized?
+          @errors.add(:unrecognized, "#{File.join(@dir,i.fname)}") unless i.recognized?
 
           # only add to hash if rename is required
           @renames[i.newname] = i if i.rename?
@@ -187,6 +183,42 @@ module Nyudl
         end
         set_analyzed
       end
+
+
+
+      # # Internal: This method performs the text analysis and updates
+      # #          the associated instance variables.
+      # #
+      # # Returns nothing.
+      # # Raises  nothing.
+      # def analyze_text
+      #   reset_analyzed
+      #   @errors  = Hash.new { |_h, k| _h[k] = [] }
+      #   @renames = {}
+      #   @names   = {}
+
+      #   Dir.chdir(@dir) do
+      #     if Dir.glob('*').length == 0
+      #       @errors[:structure] << "No files found in #{@dir}."
+      #       return
+      #     end
+      #   end
+
+      #   Dir.foreach(@dir) do |f|
+      #     next if (f == '.' || f == '..')
+
+      #     @errors[:structure] << "error: found a subdirectory. cannot process." if File.directory?(f)
+
+      #     i = Nyudl::Text::Filename.new(f, @prefix, @options)
+
+      #     @errors[:unrecognized] << "#{File.join(@dir,i.fname)}" unless i.recognized?
+
+      #     # only add to hash if rename is required
+      #     @renames[i.newname] = i if i.rename?
+      #     @names[i.newname]   = i
+      #   end
+      #   set_analyzed
+      # end
 
       # def analyze_text
       #   @errors  = Hash.new { |_h, k| _h[k] = [] }
@@ -217,7 +249,7 @@ module Nyudl
 
       def execute_rename_plan
         raise "Cannot rename.  Text not analyzed." unless analyzed?
-        raise "Cannot rename.  Errors detected."   unless @errors.values.inject(true) {|memo, value| memo && value.empty?}
+        raise "Cannot rename.  Errors detected."   unless @errors.empty?
         @renames.keys.sort.each do |k|
           FileUtils.mv(File.join(@dir, @renames[k].fname),
                        File.join(@dir, @renames[k].newname),
