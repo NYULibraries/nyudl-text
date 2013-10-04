@@ -5,6 +5,7 @@ require "nyudl/text/back_matter_number"
 require "nyudl/text/insert_number"
 require "nyudl/text/filename"
 require "nyudl/text/echo"
+require "nyudl/text/errors"
 require "nyudl/text/base"
 
 module Nyudl

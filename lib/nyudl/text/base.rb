@@ -62,6 +62,7 @@ module Nyudl
         @dir      = dir
         @prefix   = prefix
         @options  = options
+#        @errors   = Nyudl::Text::Errors.new
         @errors   = nil
         # nil values indicate "undetermined state"
         @valid    = nil
@@ -87,7 +88,9 @@ module Nyudl
       # Returns Boolean false when text failed any checks.
       # Returns NilClass nil if method called before analyze
       def valid?
-        analyzed? ? (!!self.rename? && self.errors.empty?) : nil
+        # text must be have been analyzed
+        # valid if no renames required and no errors
+        analyzed? ? (!rename? && errors.empty?) : nil
       end
 
 
@@ -105,8 +108,9 @@ module Nyudl
         nil
       end
 
+
       # Public: This method returns the errors Hash.
-      #         The errors Hash is a Hash of Arrays.
+      #         The errors Hash is a Hash of Symbol keys and Array values.
       #
       # key   - The Symbol used to select a subset of the errors Hash
       #         (default: nil). When key is present, the method returns
@@ -116,6 +120,7 @@ module Nyudl
       # Examples
       #
       #   errors
+      #   # => {}       # if no errors found
       #   # => {:foo => ['foo was missing from bar'],
       #         :baz => ['baz not declared for quux']}
       #
@@ -124,24 +129,20 @@ module Nyudl
       #
       # Returns errors Hash if key not supplied.
       # Returns Array of error Strings for key if key supplied.
-      #
-
-      #   Returns true if text is valid, false otherwise.
-      #     The definition of valid is that the errors array is empty after all
-      #     checks have been performed.
-      #   Raises ArgumentError if the dir argument is not a directory or if
-      #     the current process cannot list/access the files in the directory.
       def errors(key = nil)
         key.nil? ? @errors : @errors[key]
       end
+      # def errors(key)
+      #   @errors.on(key)
+      # end
       def rename?
-        !!@renames.empty?
+        !@renames.empty?
       end
       def rename!
         execute_rename_plan
       end
       def rename_plan
-        @renames
+        gen_rename_array
       end
       def analyzed?
         @analyzed
@@ -150,14 +151,16 @@ module Nyudl
         analyzed? ? @errors[:unrecognized].empty? : nil
       end
 
+
       private
 
-      # Private: This method performs the text analysis and updates
+      # Internal: This method performs the text analysis and updates
       #          the associated instance variables.
       #
       # Returns nothing.
       # Raises  nothing.
       def analyze_text
+        reset_analyzed
         @errors  = Hash.new { |_h, k| _h[k] = [] }
         @renames = {}
         @names   = {}
@@ -165,7 +168,7 @@ module Nyudl
         Dir.chdir(@dir) do
           if Dir.glob('*').length == 0
             @errors[:structure] << "No files found in #{@dir}."
-            return false
+            return
           end
         end
 
@@ -182,7 +185,35 @@ module Nyudl
           @renames[i.newname] = i if i.rename?
           @names[i.newname]   = i
         end
+        set_analyzed
       end
+
+      # def analyze_text
+      #   @errors  = Hash.new { |_h, k| _h[k] = [] }
+      #   @renames = {}
+      #   @names   = {}
+
+      #   Dir.chdir(@dir) do
+      #     if Dir.glob('*').length == 0
+      #       @errors[:structure] << "No files found in #{@dir}."
+      #       return
+      #     end
+      #   end
+
+      #   Dir.foreach(@dir) do |f|
+      #     next if (f == '.' || f == '..')
+
+      #     @errors[:structure] << "error: found a subdirectory. cannot process." if File.directory?(f)
+
+      #     i = Nyudl::Text::Filename.new(f, @prefix, @options)
+
+      #     @errors[:unrecognized] << "#{File.join(@dir,i.fname)}" unless i.recognized?
+
+      #     # only add to hash if rename is required
+      #     @renames[i.newname] = i if i.rename?
+      #     @names[i.newname]   = i
+      #   end
+      # end
 
       def execute_rename_plan
         raise "Cannot rename.  Text not analyzed." unless analyzed?
@@ -192,6 +223,23 @@ module Nyudl
                        File.join(@dir, @renames[k].newname),
                        :verbose => @options[:verbose], :noop => @options[:noop])
         end
+        reset_analyzed
+      end
+
+      def set_analyzed
+        @analyzed = true
+      end
+
+      def reset_analyzed
+        @analyzed = false
+      end
+
+      def gen_rename_array
+        a = []
+        @renames.keys.sort.each do |k|
+          a << [File.join(@dir, @renames[k].fname), File.join(@dir, @renames[k].newname)]
+        end
+        a
       end
     end
   end
