@@ -22,7 +22,39 @@ describe Nyudl::Text::Errors do
     end
   end
 
+  describe "#on" do
+
+    context "before errors are added" do
+      subject(:e) { Nyudl::Text::Errors.new() }
+      it "returns nil for an arbitrary key" do
+        e.on(:zip).should == nil
+      end
+    end
+
+    context "after errors are added" do
+      subject(:e) {
+        eo = Nyudl::Text::Errors.new()
+        eo.add(:foo, 'bar')
+        eo.add(:baz, 'quux')
+        eo
+      }
+
+      it "returns an array with the expected values" do
+        e.on(:foo).should == ['bar']
+        e.on(:baz).should == ['quux']
+      end
+    end
+  end
+
   describe "#all" do
+
+    context "before errors are added" do
+      subject(:e) { Nyudl::Text::Errors.new() }
+      it "returns an empty Hash" do
+        e.all.should == {}
+      end
+    end
+
     subject(:e) {
       eo = Nyudl::Text::Errors.new()
       eo.add(:foo, 'bar')
@@ -42,7 +74,7 @@ describe Nyudl::Text::Errors do
   end
 
   describe "converts String keys to Symbols" do
-    subject(:e) { 
+    subject(:e) {
       eo = Nyudl::Text::Errors.new()
       eo.add(:foo, 'bar')
       eo
