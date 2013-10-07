@@ -79,6 +79,20 @@ describe Nyudl::Text::Base do
   end
 
 
+  describe "#analyzed?", fakefs: true do
+    context "with any text" do
+      subject(:text) { stub_valid_text }
+      it "returns false when called before #analyze" do
+        text.analyzed?.should == false
+      end
+      it "returns true when called after #analyze" do
+        text.analyze
+        text.analyzed?.should == true
+      end
+    end
+  end
+
+
   describe "#errors", fakefs: true do
     context "with valid text" do
       subject(:text) { stub_valid_text }
@@ -97,11 +111,13 @@ describe Nyudl::Text::Base do
         text.errors.should be_empty
       end
 
-      # it "returns an empty Hash after text analyzed hohoho" do
-      #   text.analyze
-      #   text.errors[:bobo]
-      #   text.errors.should be_empty
-      # end
+      # this test added b/c early implementation added an Array to the Hash
+      #   even for non-existant keys
+      it "returns an empty Hash even after a query for a non-existant key" do
+        text.analyze
+        text.errors(:bobo)
+        text.errors.should be_empty
+      end
     end
 
     context "with unrecognized text" do
@@ -131,20 +147,39 @@ describe Nyudl::Text::Base do
 
   end
 
+
   describe "#rename?", fakefs: true do
-    context "with valid text" do
+    context "returns nil if called before #analyze" do
       subject (:text) { stub_valid_text }
       it "returns false" do
-        text.rename?.should be_false
+        text.rename?.should be_nil
       end
     end
 
     context "with valid text" do
       subject (:text) { stub_valid_text }
       it "returns false" do
+        text.analyze
         text.rename?.should be_false
       end
     end
+
+    context "with recognized text" do
+      subject (:text) { stub_recognized_text }
+      it "returns true" do
+        text.analyze
+        text.rename?.should be_true
+      end
+    end
+
+    context "with unrecognized text" do
+      subject (:text) { stub_unrecognized_text }
+      it "returns true" do
+        text.analyze
+        text.rename?.should be_true
+      end
+    end
+
   end
 
 
