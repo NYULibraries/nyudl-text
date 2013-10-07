@@ -32,9 +32,17 @@ describe Nyudl::Text::Base do
   end
 
 
-  describe "when an object is instantiated" do
-    subject { Nyudl::Text::Base.new('.', 'b') }
-    its(:class) { should == Nyudl::Text::Base }
+  describe "#new", fakefs: true do
+
+    context "when an object is instantiated with a valid directory" do
+      subject { FileUtils.mkdir("/b"); Nyudl::Text::Base.new('/b', 'b') }
+      its(:class) { should == Nyudl::Text::Base }
+    end
+    context "when an object is instantiated with an invalid directory" do
+      it "raises an exception" do
+        expect { Nyudl::Text::Base.new('dir-DNE', 'b') }.to raise_error ArgumentError
+      end
+    end
   end
 
 
