@@ -1,3 +1,10 @@
+begin
+  require 'simplecov'
+  SimpleCov.start
+rescue LoadError
+  puts 'Coverage disabled, enable by installing simplecov'
+end
+
 require 'fakefs/spec_helpers'
 require 'fileutils'
 
