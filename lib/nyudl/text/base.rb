@@ -144,7 +144,9 @@ module Nyudl
         execute_rename_plan
       end
       def rename_plan
-        gen_rename_array
+        emsg = "unrecognized files detected. rename not possible."
+        condition_with_analyzed { raise emsg unless recognized? }
+        condition_with_analyzed { gen_rename_array }
       end
       def analyzed?
         @analyzed
@@ -211,7 +213,7 @@ module Nyudl
       def gen_rename_array
         a = []
         @renames.keys.sort.each do |k|
-          a << [File.join(@dir, @renames[k].fname), File.join(@dir, @renames[k].newname)]
+          a << {old_name: File.join(@dir, @renames[k].fname), new_name: File.join(@dir, @renames[k].newname)}
         end
         a
       end

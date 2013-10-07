@@ -231,6 +231,41 @@ describe Nyudl::Text::Base do
   end
 
 
+
+  describe "#rename_plan", fakefs: true do
+
+    context "with any text" do
+      subject(:text) { stub_recognized_text }
+      it "returns nil if text hasn't been analyzed" do
+        text.rename_plan.should be_nil
+      end
+    end
+
+    context "with a valid text" do
+      subject(:text) { stub_valid_text }
+      it "returns []" do
+        text.analyze
+        text.rename_plan.should == []
+      end
+    end
+
+    context "with a recognized text" do
+      subject(:text) { stub_recognized_text }
+      it "returns the proper rename plan" do
+        text.analyze
+        text.rename_plan.should == [{old_name: '/b/b_000001m.tif', new_name: '/b/b_n000001_m.tif'}]
+      end
+    end
+
+    context "with an unrecognized text" do
+      subject(:text) { stub_unrecognized_text }
+      it "raises RuntimeError" do
+        text.analyze
+        expect {text.rename_plan}.to raise_error(RuntimeError)
+      end
+    end
+  end
+
   context "when some files need renaming" do
     it "#rename! only files requiring rename"
     it "#renames returns empty hash when there are no renames"
