@@ -170,7 +170,7 @@ module Nyudl
 
         Dir.chdir(@dir) do
           if Dir.glob('*').length == 0
-            @errors.add(:structure, "No files found in #{@dir}.")
+            @errors.add(:structure, "No files found in directory: '#{@dir}'.")
             return
           end
         end

@@ -4,6 +4,12 @@ require 'fakefs/safe'
 describe Nyudl::Text::Base do
 
   # this text is good as it is, no renaming required
+  def stub_empty_text
+    FileUtils.mkdir("/b")
+    Nyudl::Text::Base.new('/b', 'b')
+  end
+
+  # this text is good as it is, no renaming required
   def stub_valid_text
     FileUtils.mkdir("/b")
     File.open("/b/b_n000001_m.tif", "w") do |f|
@@ -152,7 +158,15 @@ describe Nyudl::Text::Base do
       end
     end
 
+    context "with empty text directory" do
+      subject(:text) { stub_empty_text }
 
+      it "returns nil if text not analyzed yet" do
+        text.analyze
+        text.errors(:structure).class.should == Array
+        text.errors(:structure).should == ["No files found in directory: '/b'."]
+      end
+    end
   end
 
 
