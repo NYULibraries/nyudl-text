@@ -89,8 +89,7 @@ module Nyudl
       def valid?
         # text must be have been analyzed
         # valid if no renames required and no errors
-#        condition_with_analyzed(!rename? && errors.empty?)
-        analyzed? ? (!rename? && errors.empty?) : nil
+        condition_with_analyzed { !rename? && errors.empty? }
       end
 
 
@@ -131,13 +130,13 @@ module Nyudl
       # Returns Array of error Strings for key if key supplied.
       def errors(key = nil)
         # always return nil if text not analyzed
-        analyzed? ? (key.nil? ? @errors.all : @errors.on(key)) : nil
+        condition_with_analyzed { key.nil? ? @errors.all : @errors.on(key) }
       end
       # returns true for recognized and unrecognized
       # returns false for valid text
       # returns nil if called before analyze
       def rename?
-        analyzed? ? (!@renames.empty? || !recognized?) : nil
+        condition_with_analyzed { !@renames.empty? || !recognized? }
       end
       def rename!
         raise "text not analyzed. call #analyze and try again." unless analyzed?
@@ -151,7 +150,7 @@ module Nyudl
         @analyzed
       end
       def recognized?
-        analyzed? ? @errors.on(:unrecognized).nil? : nil
+        condition_with_analyzed { @errors.on(:unrecognized).nil? }
       end
 
 
@@ -218,9 +217,9 @@ module Nyudl
       end
 
       # helper method to encapsulate analyzed? precondition
-      # if text has been analyzed, method returns value of expression, otherwise nil
-      def condition_with_analyzed(exp)
-        analyzed? ? (exp) : nil
+      # if text has been analyzed, method returns value of block, otherwise nil
+      def condition_with_analyzed
+        analyzed? ? yield : nil
       end
 
     end

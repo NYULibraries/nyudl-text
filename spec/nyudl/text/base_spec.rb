@@ -183,6 +183,54 @@ describe Nyudl::Text::Base do
   end
 
 
+  describe "#rename!", fakefs: true do
+    context "when given a valid text" do
+      subject(:text) { stub_valid_text }
+      it "raises an exception if called before #analyze" do
+        expect {text.rename!}.to raise_error RuntimeError
+      end
+      it "does nothing when called after #analyze" do
+        text.analyze
+        text.valid?.should be_true
+        text.rename?.should be_false
+        text.errors.should be_empty
+        text.rename!
+        text.analyze
+        text.valid?.should be_true
+        text.rename?.should be_false
+        text.errors.should be_empty
+      end
+    end
+
+    context "when given a recognized text" do
+      subject(:text) { stub_recognized_text }
+      it "renames the files" do
+        text.analyze
+        text.valid?.should be_false
+        text.rename?.should be_true
+        text.errors.should be_empty
+        text.rename!
+        text.analyzed?.should be_false
+        text.analyze
+        text.valid?.should be_true
+        text.rename?.should be_false
+        text.errors.should be_empty
+      end
+    end
+
+    context "when given an unrecognized text" do
+      subject(:text) { stub_unrecognized_text }
+      it "renames the files" do
+        text.analyze
+        text.valid?.should be_false
+        text.rename?.should be_true
+        text.errors.should_not be_empty
+        expect {text.rename!}.to raise_error RuntimeError
+      end
+    end
+  end
+
+
   context "when some files need renaming" do
     it "#rename! only files requiring rename"
     it "#renames returns empty hash when there are no renames"
