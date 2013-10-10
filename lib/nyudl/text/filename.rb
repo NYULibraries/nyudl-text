@@ -26,6 +26,10 @@ module Nyudl
           # noop
           @newname = @fname
 
+        when /\A#{@prefix}_eoc.csv\z/
+          # noop
+          @newname = @fname
+
           # STANDARD PAGES
         when /\A(#{@prefix})_(#{@pg_num.acc_rf})_?((d|m)\.tif)\z/   then
           # numbered page, dmaker, old-style role 

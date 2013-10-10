@@ -196,6 +196,13 @@ describe Nyudl::Text::Filename do
     it { should_not be_rename }
   end
 
+  context "when eoc.csv file is found" do
+    subject { Nyudl::Text::Filename.new('mss092_ref14_eoc.csv', 'mss092_ref14') }
+
+    it { should be_recognized }
+    it { should_not be_rename }
+  end
+
   # this is because, for some reason, Ruby can correctly convert numbers 0-7 
   # to_i if they have a leading zero, but hit 08 and all bets are off.
   # probably b/c 00 -> 07 Octal are valid, but 08 is not valid Octal and
