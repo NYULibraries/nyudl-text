@@ -329,6 +329,15 @@ describe Nyudl::Text::Filename do
       its(:role) { should == 'target' }
     end
 
+    context "when a target file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_target.tif', 'mss092_ref14') }
+      its(:role) { should == 'target' }
+    end
+
+    context "when a numbered-page insert file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_000068_1m.tif', 'mss092_ref14') }
+      its(:role) { should == 'target' }
+    end
 
 
 
