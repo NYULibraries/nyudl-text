@@ -18,7 +18,7 @@ require 'fileutils'
    insert_number
    page_number
    errors
-   echo
+   slot
 ).each { |f| require_relative(File.join('..','lib','nyudl','text', f)) }
 
 RSpec.configure do |config|

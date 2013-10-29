@@ -1,6 +1,7 @@
 # Nyudl::Text
 
-TODO: Write a gem description
+This gem encapsulates functionality for processing Text digital objects 
+generated or managed by NYU's Digital Library Technology Services group.
 
 ## Installation
 

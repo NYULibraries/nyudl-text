@@ -7,6 +7,7 @@ require "nyudl/text/filename"
 require "nyudl/text/echo"
 require "nyudl/text/errors"
 require "nyudl/text/base"
+require "nyudl/text/slot"
 
 module Nyudl
   module Text
