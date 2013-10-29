@@ -329,17 +329,84 @@ describe Nyudl::Text::Filename do
       its(:role) { should == 'target' }
     end
 
-    context "when a target file is instantiated" do
-      subject { Nyudl::Text::Filename.new('mss092_ref14_target.tif', 'mss092_ref14') }
-      its(:role) { should == 'target' }
-    end
-
-    context "when a numbered-page insert file is instantiated" do
+    context "when a numbered-page-insert master file is instantiated" do
       subject { Nyudl::Text::Filename.new('mss092_ref14_000068_1m.tif', 'mss092_ref14') }
-      its(:role) { should == 'target' }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a front-matter-insert-with-hyphen master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14-fr01_1m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a front-matter-insert-with-underscore master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_fr01_1m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a back-matter-insert-with-underscore master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_bk01_1m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
     end
 
 
+
+    context "when a numbered-page-oversized master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_000068_1_1m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a front-matter-oversized-with-hyphen dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14-fr01_1_01d.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker' }
+    end
+
+    context "when a front-matter-oversized-with-underscore dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_fr01_1_01d.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker' }
+    end
+
+    context "when a back-matter-oversized-with-underscore master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_bk01_1_1m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+
+    context "when a correct numbered-page filename master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_n000068_m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a correct front-matter filename dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_afr01_d.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker' }
+    end
+
+    context "when a correct back-matter filename master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_zbk01_m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+
+    context "when a correct numbered-page-insert filename master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_n000068_z08_m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a correct front-matter-page-insert filename master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_afr01_z08_m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a correct back-matter filename dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_zbk01_z08_d.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker' }
+    end
+
+    context "when a correct target file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_ztarget_m.tif', 'mss092_ref14') }
+      its(:role) { should == 'target' }
+    end
 
   end
 end

@@ -73,7 +73,7 @@ module Nyudl
           inum   = $3.dup
           suffix = $4.dup
           @newname = "#{@new_prefix}_#{@pg_num.fmt(pn)}_#{@in_num.fmt(inum)}_#{suffix}"
-#          @role    = determine_role($5)
+          @role    = determine_role($5)
 
         when /\A(#{@prefix})(-|_)(#{@fr_num.acc_rf})_(#{@in_num.acc_rf})_?((d|m)\.tif)\z/ then
           # front matter, old-style role
@@ -81,6 +81,7 @@ module Nyudl
           inum    = $4.dup
           suffix  = $5.dup
           @newname = "#{@new_prefix}_#{@fr_num.fmt(fr)}_#{@in_num.fmt(inum)}_#{suffix}"
+          @role    = determine_role($6)
 
         when /\A(#{@prefix})_(#{@bk_num.acc_rf})_(#{@in_num.acc_rf})_?((d|m)\.tif)\z/ then
           # back matter, old-style role
@@ -88,6 +89,7 @@ module Nyudl
           inum   = $3.dup
           suffix = $4.dup
           @newname = "#{@new_prefix}_#{@bk_num.fmt(bk)}_#{@in_num.fmt(inum)}_#{suffix}"
+          @role    = determine_role($5)
 
 
           # OVERSIZED (accepts and corrects _N or _NN)
@@ -97,7 +99,9 @@ module Nyudl
           olevel_1 = $3.dup
           olevel_2 = $4.dup
           suffix   = $5.dup
+          @role    = determine_role($6)
           @newname = "#{@new_prefix}_#{@pg_num.fmt(pn)}_z#{'%02d' % olevel_1.gsub(/\A0+/, '')}_z#{'%02d' % olevel_2.gsub(/\A0+/, '')}_#{suffix}"
+
 
         when /\A(#{@prefix})(-|_)(#{@fr_num.acc_rf})_(\d+)_(\d+)_?((d|m)\.tif)\z/ then
           # front matter, old-style role
@@ -105,6 +109,7 @@ module Nyudl
           olevel_1 = $4.dup
           olevel_2 = $5.dup
           suffix   = $6.dup
+          @role    = determine_role($7)
           @newname = "#{@new_prefix}_#{@fr_num.fmt(fr)}_z#{'%02d' % olevel_1.gsub(/\A0+/, '')}_z#{'%02d' % olevel_2.gsub(/\A0+/, '')}_#{suffix}"
 
         when /\A(#{@prefix})_(#{@bk_num.acc_rf})_(\d+)_(\d+)_?((d|m)\.tif)\z/ then
@@ -113,6 +118,7 @@ module Nyudl
           olevel_1 = $3.dup
           olevel_2 = $4.dup
           suffix   = $5.dup
+          @role    = determine_role($6)
           @newname = "#{@new_prefix}_#{@bk_num.fmt(bk)}_z#{'%02d' % olevel_1.gsub(/\A0+/, '')}_z#{'%02d' % olevel_2.gsub(/\A0+/, '')}_#{suffix}"
 
 
@@ -131,8 +137,9 @@ module Nyudl
           /\A(#{@prefix})(_#{@fr_num.out_rf}_z\d{2}_z\d{2}_(m|d)\.tif)/ ,
           /\A(#{@prefix})(_#{@bk_num.out_rf}_z\d{2}_z\d{2}_(m|d)\.tif)/ ,
           /\A(#{@prefix})(_ztarget_m.tif)/
-        then @newname = "#{@new_prefix}#{$2}"
-
+        then
+          @newname = "#{@new_prefix}#{$2}"
+          @role = ($2 == '_ztarget_m.tif') ? 'target' : determine_role($3)
         else
           @recognized = false
         end
