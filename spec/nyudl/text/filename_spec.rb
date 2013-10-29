@@ -10,6 +10,7 @@ describe Nyudl::Text::Filename do
     it { should be_recognized }
     it { should be_rename    }
     its(:newname) { should == 'mss092_ref14_n000068_m.tif'}
+    its(:role) {should == 'master'}
   end
 
   context "when prefix does not match" do
@@ -279,6 +280,58 @@ describe Nyudl::Text::Filename do
       it { should be_recognized }
       its(:newname) { should == v }
     end
+  end
+
+
+  describe "#role" do
+    context "when a README.txt file is instantiated" do
+      subject { Nyudl::Text::Filename.new('README.txt', 'mss092_ref14') }
+      its(:role) { should == 'readme' }
+    end
+
+    context "when an EOC file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_eoc.csv', 'mss092_ref14') }
+      its(:role) { should == 'eoc' }
+    end
+
+    context "when a numbered-page master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a numbered-page dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_000068d.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker' }
+    end
+
+    context "when a front-matter master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14-fr02m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a front-matter dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14-fr02d.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker' }
+    end
+
+    context "when a back-matter master file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_bk02m.tif', 'mss092_ref14') }
+      its(:role) { should == 'master' }
+    end
+
+    context "when a back-matter dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_bk02d.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker' }
+    end
+
+    context "when a target file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_target.tif', 'mss092_ref14') }
+      its(:role) { should == 'target' }
+    end
+
+
+
+
   end
 end
 

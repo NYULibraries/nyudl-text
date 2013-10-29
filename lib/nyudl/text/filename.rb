@@ -1,7 +1,9 @@
 module Nyudl
   module Text
+
+    # TODO: This needs SERIOUS refactoring
     class Filename
-      attr_reader :prefix, :fname, :newname
+      attr_reader :prefix, :fname, :newname, :role
 
       def initialize(fname, prefix, options = {})
 
@@ -10,7 +12,8 @@ module Nyudl
         @fname   = fname.dup
         @newname = ''
         @recognized = true
-        @new_prefix    = options[:new_prefix] ? options[:new_prefix] : @prefix
+        @new_prefix = options[:new_prefix] ? options[:new_prefix] : @prefix
+        @role = nil
 
 
         # initialize number fragment detectors/formatters
@@ -25,10 +28,12 @@ module Nyudl
         when /\AREADME.txt\z/
           # noop
           @newname = @fname
+          @role = 'readme'
 
         when /\A#{@prefix}_eoc.csv\z/
           # noop
           @newname = @fname
+          @role = 'eoc'
 
           # STANDARD PAGES
         when /\A(#{@prefix})_(#{@pg_num.acc_rf})_?((d|m)\.tif)\z/   then
@@ -38,6 +43,7 @@ module Nyudl
           pn       = $2.dup
           suffix   = $3.dup
           @newname = "#{@new_prefix}_#{@pg_num.fmt(pn)}_#{suffix}"
+          @role    = determine_role($4)
 
         when /\A(#{@prefix})(_|-)(#{@fr_num.acc_rf})_?((d|m)\.tif)\z/ then 
           # front matter, dmaker, old-style role 
@@ -45,6 +51,7 @@ module Nyudl
           fr     = $3.dup
           suffix = $4.dup
           @newname = "#{@new_prefix}_#{@fr_num.fmt(fr)}_#{suffix}"
+          @role    = determine_role($5)
 
         when /\A(#{@prefix})_(#{@bk_num.acc_rf})_?((d|m)\.tif)\z/ then 
           # back matter, dmaker, old-style role 
@@ -52,9 +59,11 @@ module Nyudl
           bk     = $2.dup
           suffix = $3.dup
           @newname = "#{@new_prefix}_#{@bk_num.fmt(bk)}_#{suffix}"
+          @role    = determine_role($4)
 
         when /\A(#{@prefix})_target_?m?(\.tif)\z/   then
           @newname = "#{@new_prefix}_ztarget_m#{$2}"
+          @role    = 'target'
 
 
           # INSERTS (accepts and corrects _N or _NN)
@@ -140,7 +149,14 @@ module Nyudl
           nil
         end
       end
-    end
 
+      private
+      def determine_role(str)
+        case str
+          when 'd' then 'dmaker'
+          when 'm' then 'master'
+        end
+      end
+    end
   end
 end
