@@ -8,14 +8,10 @@ describe Nyudl::Text::Slot do
   #   Nyudl::Text::Base.new('/b', 'b')
   # end
 
-  # # this text is good as it is, no renaming required
-  # def stub_valid_text
-  #   FileUtils.mkdir("/b")
-  #   File.open("/b/b_n000001_m.tif", "w") do |f|
-  #     f.puts("hohoho")
-  #   end
-  #   Nyudl::Text::Base.new('/b', 'b')
-  # end
+  # this slot is good as it is
+  def stub_valid_slot
+    Nyudl::Text::Slot.new({type: 'page', location: 'top'})
+  end
 
   # # this text does not conform to the naming convention,
   # # but all files are recognized and can be renamed
@@ -38,12 +34,22 @@ describe Nyudl::Text::Slot do
 
 
   describe "#new", true do
-
     context "when an object is instantiated" do
-      subject { Nyudl::Text::Slot.new() }
+      subject(:slot) { stub_valid_slot }
       its(:class) { should == Nyudl::Text::Slot }
     end
+
+    context "when an invalid object is instantiated" do
+      it "raises an exception if location is invalid" do
+        expect {Nyudl::Text::Slot.new({:location => 'FOO', :type => 'page'})}.to raise_error ArgumentError
+      end
+      it "raises an exception if type is invalid" do
+        expect {Nyudl::Text::Slot.new({:location => 'left', :type => 'FOO'})}.to raise_error ArgumentError
+      end
+    end
   end
+
+
 
 
   # describe "#valid?", fakefs: true do
