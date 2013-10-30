@@ -2,7 +2,40 @@ module Nyudl
   module Text
 
     # TODO: This needs SERIOUS refactoring
+    # TODO: class for each file type (insert, oversized, numbered, front matter, back matter)
+    # TODO: may want to introduce "type" and "role", where type is eoc, insert, oversized, target, ...
+    # TODO: role is dmaker, master, dmaker_enhanced, dmaker_redacted
     class Filename
+
+      # difference two filenames and return relationship
+      # cases:
+      # :unknown   - cannot determine relationship
+      # :same_slot - filenames only differ by role
+      # :parent    - f1 is parent of f2
+      # :child     - f1 is child  of f2
+      #
+      # usage:
+      # this function can be used when trying to determine a slot type
+      # one would call this on the files
+      # NOTE: TAKES STRINGS FOR ARGUMENTS
+      def self.relationship(f1, f2)
+        # nre = no role or extension
+        f1_nre = f1.sub(/(m|d)\.tif/,'')
+        f2_nre = f2.sub(/(m|d)\.tif/,'')
+        if f1 == f2
+          :identical
+        elsif f1_nre == f2_nre
+          :same_slot
+        elsif f2_nre.start_with?(f1_nre)
+          :parent
+        elsif f1_nre.start_with?(f2_nre)
+          :child
+        else
+          :unknown
+        end
+      end
+
+
       attr_reader :prefix, :fname, :newname, :role
 
       def initialize(fname, prefix, options = {})

@@ -2,6 +2,28 @@ require 'spec_helper'
 
 describe Nyudl::Text::Filename do
 
+  describe ".relationship" do
+    context "when given the same file name" do
+      subject { Nyudl::Text::Filename.relationship('a','a') }
+      it { should == :identical }
+    end
+    context "when given dmaker and master for same slot" do
+      subject { Nyudl::Text::Filename.relationship('mss092_ref14_afr01_z08_m.tif','mss092_ref14_afr01_z08_d.tif') }
+      it { should == :same_slot }
+    end
+    context "when given dmaker for oversized and master for part" do
+      subject { Nyudl::Text::Filename.relationship('mss092_ref14_afr01_d.tif','mss092_ref14_afr01_z08_m.tif') }
+      it { should == :parent }
+    end
+    context "when given dmaker for oversized and master for part" do
+      subject { Nyudl::Text::Filename.relationship('mss092_ref14_afr01_z08_m.tif','mss092_ref14_afr01_d.tif') }
+      it { should == :child }
+    end
+    context "when given dmaker for oversized and master for part" do
+      subject { Nyudl::Text::Filename.relationship('mss092_ref14_afr02_d.tif','mss092_ref14_afr01_z08_m.tif') }
+      it { should == :unknown }
+    end
+  end
 
   context "when object is instantiated" do
     subject { Nyudl::Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14') }
