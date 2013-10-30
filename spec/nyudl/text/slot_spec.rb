@@ -8,20 +8,43 @@ describe Nyudl::Text::Slot do
   #   Nyudl::Text::Base.new('/b', 'b')
   # end
 
-  # this slot is good as it is
+  def stub_master_filename
+    Nyudl::Text::Filename.new('mss092_ref14_000068m.tif', 'mss092_ref14') 
+  end
+
+  def stub_dmaker_filename
+    Nyudl::Text::Filename.new('mss092_ref14_000068d.tif', 'mss092_ref14') 
+  end
+
+  def stub_oversized_master_1_filename
+    Nyudl::Text::Filename.new('mss092_ref14_000068_01m.tif', 'mss092_ref14') 
+  end
+
+  def stub_oversized_master_2_filename
+    Nyudl::Text::Filename.new('mss092_ref14_000068_02m.tif', 'mss092_ref14') 
+  end
+
+
+  def stub_raw_slot
+    Nyudl::Text::Slot.new()
+  end
+
   def stub_valid_slot
     Nyudl::Text::Slot.new({type: 'page', location: 'top'})
   end
 
-  # # this text does not conform to the naming convention,
-  # # but all files are recognized and can be renamed
-  # def stub_recognized_text
-  #   FileUtils.mkdir("/b")
-  #   File.open("/b/b_000001m.tif", "w") do |f|
-  #     f.puts("hohoho")
-  #   end
-  #   Nyudl::Text::Base.new('/b', 'b')
-  # end
+  def stub_slot_with_invalid_location
+    Nyudl::Text::Slot.new({type: 'page', location: 'FOO'})
+  end
+
+  def stub_slot_with_invalid_type
+    Nyudl::Text::Slot.new({type: 'FOO', location: 'top'})
+  end
+
+  def stub_slot_with_invalid_location_and_invalid_type
+    Nyudl::Text::Slot.new({type: 'FOO', location: 'BAR'})
+  end
+
 
   # # this text does not conform to the naming convention,
   # # but all files are recognized and can be renamed
@@ -31,261 +54,88 @@ describe Nyudl::Text::Slot do
   #   FileUtils.touch("/b/asdfasd")
   #   Nyudl::Text::Base.new('/b', 'b')
   # end
-
-
-  describe "#new", true do
-    context "when an object is instantiated" do
+  describe "#new" do
+    context "when a slot is instantiated with valid type and location" do
       subject(:slot) { stub_valid_slot }
       its(:class) { should == Nyudl::Text::Slot }
     end
 
-    context "when an invalid object is instantiated" do
-      it "raises an exception if location is invalid" do
-        expect {Nyudl::Text::Slot.new({:location => 'FOO', :type => 'page'})}.to raise_error ArgumentError
+    context "when a slot is instantiated without any parameters" do
+      it "doesn't raise an exception" do
+        expect { Nyudl::Text::Slot.new() }.not_to raise_error
       end
-      it "raises an exception if type is invalid" do
-        expect {Nyudl::Text::Slot.new({:location => 'left', :type => 'FOO'})}.to raise_error ArgumentError
+    end
+  end
+  describe "#errors" do
+    context "when a slot is instantiated with an invalid location" do
+      subject(:slot) { stub_slot_with_invalid_location }
+      it ":location array should not be empty" do
+        expect(slot.errors[:location]).to eq(["invalid location: FOO"])
+      end
+    end
+    context "when a slot is instantiated with an invalid type" do
+      subject(:slot) { stub_slot_with_invalid_type }
+      it ":type array should not be empty" do
+        expect(slot.errors[:type]).to eq(["invalid type: FOO"])
+      end
+    end
+    context "when a slot is instantiated with an invalid location and invalid type" do
+      subject(:slot) { stub_slot_with_invalid_location_and_invalid_type }
+      it ":type array should not be empty" do
+        expect(slot.errors).to eq({:location => ["invalid location: BAR"],
+                                    :type     => ["invalid type: FOO"]})
       end
     end
   end
 
+  describe "#recognized?" do
+    context "when a slot is instantiated with an invalid location" do
+      subject(:slot) { stub_slot_with_invalid_location }
+      it "is not recognized" do
+        expect(slot.recognized?).to eq(false)
+      end
+    end
+    context "when a slot is instantiated with valid parameters, but no files" do
+      subject(:slot) { stub_valid_slot }
+      it "is not recognized" do
+        expect(slot.recognized?).to eq(false)
+      end
+    end
+  end
 
+  describe "#<<" do
+    context "when a slot is instantiated without any parameters" do
+      subject(:slot) { stub_raw_slot }
+      it "doesn't have any files" do
+        expect(slot.files).to eq({})
+      end
+      it "can add files" do
+        expect(slot.files).to eq({})
+        f1 = stub_master_filename
+        slot << f1
+        expect(slot.files).to eq({f1.role => [f1]})
+      end
+      it "can add files with different roles" do
+        f1 = stub_master_filename
+        f2 = stub_dmaker_filename
+        slot << f1
+        expect(slot.files).to eq({f1.role => [f1]})
+        slot << f2
+        expect(slot.files).to eq({f1.role => [f1], f2.role => [f2]})
+      end
+      it "can add files with the same roles" do
+        m1 = stub_oversized_master_1_filename
+        m2 = stub_oversized_master_2_filename
+        d1 = stub_dmaker_filename
+        slot << m1
+        expect(slot.files).to eq({m1.role => [m1]})
+        slot << m2
+        expect(slot.files).to eq({m1.role => [m1, m2]})
+        slot << d1
+        expect(slot.files).to eq({m1.role => [m1, m2], d1.role => [d1]})
+      end
 
+    end
+  end
 
-  # describe "#valid?", fakefs: true do
-
-  #   context "with valid text" do
-  #     subject(:text) { stub_valid_text }
-  #     it "returns nil if called before #analyze" do
-  #       text.valid?.should == nil
-  #     end
-  #     it "returns true if valid and called after #analyze" do
-  #       text.analyze
-  #       text.valid?.should be_true
-  #     end
-  #   end
-
-  #   context "with text that needs renaming" do
-  #     subject(:text) { stub_recognized_text }
-  #     it "returns false if renaming required and called after #analyze" do
-  #       text.analyze
-  #       text.valid?.should be_false
-  #     end
-  #   end
-  # end
-
-
-  # describe "#analyze", fakefs: true do
-  #   context "with any text" do
-  #     subject(:text) { stub_valid_text }
-  #     it "always returns nil" do
-  #       text.analyze.should == nil
-  #     end
-  #     subject(:text) { stub_recognized_text }
-  #     it "always returns nil" do
-  #       text.analyze.should == nil
-  #     end
-  #     subject(:text) { stub_unrecognized_text }
-  #     it "always returns nil" do
-  #       text.analyze.should == nil
-  #     end
-  #   end
-  # end
-
-
-  # describe "#analyzed?", fakefs: true do
-  #   context "with any text" do
-  #     subject(:text) { stub_valid_text }
-  #     it "returns false when called before #analyze" do
-  #       text.analyzed?.should == false
-  #     end
-  #     it "returns true when called after #analyze" do
-  #       text.analyze
-  #       text.analyzed?.should == true
-  #     end
-  #   end
-  # end
-
-
-  # describe "#errors", fakefs: true do
-  #   context "with valid text" do
-  #     subject(:text) { stub_valid_text }
-
-  #     it "returns nil if text not analyzed yet" do
-  #       text.errors.should == nil
-  #     end
-
-  #     it "returns a Hash after text analyzed" do
-  #       text.analyze
-  #       text.errors.class.should == Hash
-  #     end
-
-  #     it "returns an empty Hash after text analyzed" do
-  #       text.analyze
-  #       text.errors.should be_empty
-  #     end
-
-  #     # this test added b/c early implementation added an Array to the Hash
-  #     #   even for non-existant keys
-  #     it "returns an empty Hash even after a query for a non-existant key" do
-  #       text.analyze
-  #       text.errors(:bobo)
-  #       text.errors.should be_empty
-  #     end
-  #   end
-
-  #   context "with unrecognized text" do
-  #     subject(:text) { stub_unrecognized_text }
-
-  #     it "returns nil if text not analyzed yet" do
-  #       text.errors.should == nil
-  #     end
-
-  #     it "returns a Hash after text analyzed" do
-  #       text.analyze
-  #       text.errors.class.should == Hash
-  #     end
-
-  #     it "returns a Hash with unrecognized key after text analyzed" do
-  #       text.analyze
-  #       text.errors.keys.should == [:unrecognized]
-  #     end
-
-  #     it "returns an Array with the unrecognized filename when queried with :unrecognized key" do
-  #       text.analyze
-  #       text.errors(:unrecognized).class.should == Array
-  #       text.errors(:unrecognized).should == ['/b/asdfasd']
-  #     end
-  #   end
-
-  #   context "with empty text directory" do
-  #     subject(:text) { stub_empty_text }
-
-  #     it "returns nil if text not analyzed yet" do
-  #       text.analyze
-  #       text.errors(:structure).class.should == Array
-  #       text.errors(:structure).should == ["No files found in directory: '/b'."]
-  #     end
-  #   end
-  # end
-
-
-  # describe "#rename?", fakefs: true do
-  #   context "returns nil if called before #analyze" do
-  #     subject (:text) { stub_valid_text }
-  #     it "returns false" do
-  #       text.rename?.should be_nil
-  #     end
-  #   end
-
-  #   context "with valid text" do
-  #     subject (:text) { stub_valid_text }
-  #     it "returns false" do
-  #       text.analyze
-  #       text.rename?.should be_false
-  #     end
-  #   end
-
-  #   context "with recognized text" do
-  #     subject (:text) { stub_recognized_text }
-  #     it "returns true" do
-  #       text.analyze
-  #       text.rename?.should be_true
-  #     end
-  #   end
-
-  #   context "with unrecognized text" do
-  #     subject (:text) { stub_unrecognized_text }
-  #     it "returns true" do
-  #       text.analyze
-  #       text.rename?.should be_true
-  #     end
-  #   end
-
-  # end
-
-
-  # describe "#rename!", fakefs: true do
-  #   context "when given a valid text" do
-  #     subject(:text) { stub_valid_text }
-  #     it "raises an exception if called before #analyze" do
-  #       expect {text.rename!}.to raise_error RuntimeError
-  #     end
-  #     it "does nothing when called after #analyze" do
-  #       text.analyze
-  #       text.valid?.should be_true
-  #       text.rename?.should be_false
-  #       text.errors.should be_empty
-  #       text.rename!
-  #       text.analyze
-  #       text.valid?.should be_true
-  #       text.rename?.should be_false
-  #       text.errors.should be_empty
-  #     end
-  #   end
-
-  #   context "when given a recognized text" do
-  #     subject(:text) { stub_recognized_text }
-  #     it "renames the files" do
-  #       text.analyze
-  #       text.valid?.should be_false
-  #       text.rename?.should be_true
-  #       text.errors.should be_empty
-  #       text.rename!
-  #       text.analyzed?.should be_false
-  #       text.analyze
-  #       text.valid?.should be_true
-  #       text.rename?.should be_false
-  #       text.errors.should be_empty
-  #     end
-  #   end
-
-  #   context "when given an unrecognized text" do
-  #     subject(:text) { stub_unrecognized_text }
-  #     it "renames the files" do
-  #       text.analyze
-  #       text.valid?.should be_false
-  #       text.rename?.should be_true
-  #       text.errors.should_not be_empty
-  #       expect {text.rename!}.to raise_error RuntimeError
-  #     end
-  #   end
-  # end
-
-
-
-  # describe "#rename_plan", fakefs: true do
-
-  #   context "with any text" do
-  #     subject(:text) { stub_recognized_text }
-  #     it "returns nil if text hasn't been analyzed" do
-  #       text.rename_plan.should be_nil
-  #     end
-  #   end
-
-  #   context "with a valid text" do
-  #     subject(:text) { stub_valid_text }
-  #     it "returns []" do
-  #       text.analyze
-  #       text.rename_plan.should == []
-  #     end
-  #   end
-
-  #   context "with a recognized text" do
-  #     subject(:text) { stub_recognized_text }
-  #     it "returns the proper rename plan" do
-  #       text.analyze
-  #       text.rename_plan.should == [{old_name: '/b/b_000001m.tif', new_name: '/b/b_n000001_m.tif'}]
-  #     end
-  #   end
-
-  #   context "with an unrecognized text" do
-  #     subject(:text) { stub_unrecognized_text }
-  #     it "raises RuntimeError" do
-  #       text.analyze
-  #       expect {text.rename_plan}.to raise_error(RuntimeError)
-  #     end
-  #   end
-  # end
 end
-
