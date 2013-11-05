@@ -195,8 +195,13 @@ module Nyudl
         raise "Cannot rename.  Text not analyzed." unless analyzed?
         raise "Cannot rename.  Errors detected."   unless @errors.empty?
         @renames.keys.sort.each do |k|
-          FileUtils.mv(File.join(@dir, @renames[k].fname),
-                       File.join(@dir, @renames[k].newname),
+
+          source = File.join(@dir, @renames[k].fname)
+          target = File.join(@dir, @renames[k].newname)
+
+          raise "ERROR: #{target} already exists! Halting." if File.exist?(target)
+
+          FileUtils.mv(source, target,
                        :verbose => @options[:verbose], :noop => @options[:noop])
         end
         reset_analyzed

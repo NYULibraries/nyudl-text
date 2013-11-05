@@ -30,6 +30,20 @@ describe Nyudl::Text::Base do
 
   # this text does not conform to the naming convention,
   # but all files are recognized and can be renamed
+  # rename operation will COLLIDE
+  def stub_collision_text
+    FileUtils.mkdir("/b")
+    File.open("/b/b_000001m.tif", "w") do |f|
+      f.puts("hohoho")
+    end
+    File.open("/b/b_n000001_m.tif", "w") do |f|
+      f.puts("hehehe")
+    end
+    Nyudl::Text::Base.new('/b', 'b')
+  end
+
+  # this text does not conform to the naming convention,
+  # but all files are recognized and can be renamed
   def stub_unrecognized_text
     FileUtils.mkdir("/b")
     FileUtils.touch("/b/b_000001_m.tif")
@@ -242,11 +256,22 @@ describe Nyudl::Text::Base do
 
     context "when given an unrecognized text" do
       subject(:text) { stub_unrecognized_text }
-      it "renames the files" do
+      it "raises an exception" do
         text.analyze
         text.valid?.should be_false
         text.rename?.should be_true
         text.errors.should_not be_empty
+        expect {text.rename!}.to raise_error RuntimeError
+      end
+    end
+
+    context "when given a recognized text with a collision" do
+      subject(:text) { stub_collision_text }
+      it "raises an exception the files" do
+        text.analyze
+        text.valid?.should be_false
+        text.rename?.should be_true
+        text.errors.should be_empty
         expect {text.rename!}.to raise_error RuntimeError
       end
     end
