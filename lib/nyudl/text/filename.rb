@@ -68,6 +68,11 @@ module Nyudl
           @newname = @fname
           @role = 'eoc'
 
+        when /EOC\.xls\z/
+          # noop
+          @newname = @fname
+          @role = 'eoc'
+
           # STANDARD PAGES
         when /\A(#{@prefix})_(#{@pg_num.acc_rf})_?((d|m)\.tif)\z/   then
           # numbered page, dmaker, old-style role
