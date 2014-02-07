@@ -268,34 +268,57 @@ describe Nyudl::Text::Filename do
 
   prefix = 'mss092_ref14'
   {
-    "mss092_ref14_000068m.tif" => "mss092_ref14_n000068_m.tif",
-    "mss092_ref14-fr01d.tif"   => "mss092_ref14_afr01_d.tif",
-    "mss092_ref14_fr01d.tif"   => "mss092_ref14_afr01_d.tif",
-    "mss092_ref14_bk01m.tif"   => "mss092_ref14_zbk01_m.tif",
+    "mss092_ref14_000068m.tif"  => "mss092_ref14_n000068_m.tif",
+    "mss092_ref14_000068d.tif"  => "mss092_ref14_n000068_d.tif",
+    "mss092_ref14_000068de.tif" => "mss092_ref14_n000068_de.tif",
+    "mss092_ref14-fr01d.tif"    => "mss092_ref14_afr01_d.tif",
+    "mss092_ref14_fr01d.tif"    => "mss092_ref14_afr01_d.tif",
+    "mss092_ref14-fr01de.tif"   => "mss092_ref14_afr01_de.tif",
+    "mss092_ref14_fr01de.tif"   => "mss092_ref14_afr01_de.tif",
+    "mss092_ref14_bk01m.tif"    => "mss092_ref14_zbk01_m.tif",
+    "mss092_ref14_bk01d.tif"    => "mss092_ref14_zbk01_d.tif",
+    "mss092_ref14_bk01de.tif"   => "mss092_ref14_zbk01_de.tif",
 
     "mss092_ref14_000068_1m.tif" => "mss092_ref14_n000068_z01_m.tif",
     "mss092_ref14-fr01_1d.tif"   => "mss092_ref14_afr01_z01_d.tif",
     "mss092_ref14_fr01_1d.tif"   => "mss092_ref14_afr01_z01_d.tif",
+    "mss092_ref14-fr01_1de.tif"  => "mss092_ref14_afr01_z01_de.tif",
+    "mss092_ref14_fr01_1de.tif"  => "mss092_ref14_afr01_z01_de.tif",
     "mss092_ref14_bk01_1m.tif"   => "mss092_ref14_zbk01_z01_m.tif",
 
     "mss092_ref14_000068_1_1m.tif"  => "mss092_ref14_n000068_z01_z01_m.tif",
+    "mss092_ref14_000068_1_1d.tif"  => "mss092_ref14_n000068_z01_z01_d.tif",
+    "mss092_ref14_000068_1_1de.tif" => "mss092_ref14_n000068_z01_z01_de.tif",
     "mss092_ref14-fr01_1_01d.tif"   => "mss092_ref14_afr01_z01_z01_d.tif",
     "mss092_ref14_fr01_1_01d.tif"   => "mss092_ref14_afr01_z01_z01_d.tif",
+    "mss092_ref14-fr01_1_01de.tif"  => "mss092_ref14_afr01_z01_z01_de.tif",
+    "mss092_ref14_fr01_1_01de.tif"  => "mss092_ref14_afr01_z01_z01_de.tif",
     "mss092_ref14_bk01_1_1m.tif"    => "mss092_ref14_zbk01_z01_z01_m.tif",
+    "mss092_ref14_bk01_1_1d.tif"    => "mss092_ref14_zbk01_z01_z01_d.tif",
+    "mss092_ref14_bk01_1_1de.tif"    => "mss092_ref14_zbk01_z01_z01_de.tif",
 
     "mss092_ref14_targetm.tif"      => "mss092_ref14_ztarget_m.tif",
     "mss092_ref14_target.tif"       => "mss092_ref14_ztarget_m.tif",
 
-    "mss092_ref14_n000068_m.tif" => "mss092_ref14_n000068_m.tif",
-    "mss092_ref14_afr01_d.tif"   => "mss092_ref14_afr01_d.tif",
-    "mss092_ref14_zbk01_m.tif"   => "mss092_ref14_zbk01_m.tif",
+    "mss092_ref14_n000068_m.tif"  => "mss092_ref14_n000068_m.tif",
+    "mss092_ref14_n000068_d.tif"  => "mss092_ref14_n000068_d.tif",
+    "mss092_ref14_n000068_de.tif" => "mss092_ref14_n000068_de.tif",
+    "mss092_ref14_afr01_d.tif"    => "mss092_ref14_afr01_d.tif",
+    "mss092_ref14_afr01_de.tif"   => "mss092_ref14_afr01_de.tif",
+    "mss092_ref14_zbk01_m.tif"    => "mss092_ref14_zbk01_m.tif",
+    "mss092_ref14_zbk01_d.tif"    => "mss092_ref14_zbk01_d.tif",
+    "mss092_ref14_zbk01_de.tif"   => "mss092_ref14_zbk01_de.tif",
 
-    "mss092_ref14_n000068_z08_m.tif" => "mss092_ref14_n000068_z08_m.tif",
-    "mss092_ref14_afr01_z08_d.tif"   => "mss092_ref14_afr01_z08_d.tif",
-    "mss092_ref14_zbk01_z08_m.tif"   => "mss092_ref14_zbk01_z08_m.tif",
+    "mss092_ref14_n000068_z08_m.tif"  => "mss092_ref14_n000068_z08_m.tif",
+    "mss092_ref14_n000068_z08_d.tif"  => "mss092_ref14_n000068_z08_d.tif",
+    "mss092_ref14_n000068_z08_de.tif" => "mss092_ref14_n000068_z08_de.tif",
+    "mss092_ref14_zbk01_z08_m.tif"    => "mss092_ref14_zbk01_z08_m.tif",
+    "mss092_ref14_afr01_z08_d.tif"    => "mss092_ref14_afr01_z08_d.tif",
+    "mss092_ref14_afr01_z08_de.tif"   => "mss092_ref14_afr01_z08_de.tif",
 
     "mss092_ref14_n000068_z08_z08_m.tif" => "mss092_ref14_n000068_z08_z08_m.tif",
     "mss092_ref14_afr01_z08_z08_d.tif"   => "mss092_ref14_afr01_z08_z08_d.tif",
+    "mss092_ref14_afr01_z08_z08_de.tif"  => "mss092_ref14_afr01_z08_z08_de.tif",
     "mss092_ref14_zbk01_z08_z08_m.tif"   => "mss092_ref14_zbk01_z08_z08_m.tif"
   }.each_pair do |k,v|
     context "when using known filename patterns" do
@@ -332,6 +355,11 @@ describe Nyudl::Text::Filename do
       its(:role) { should == 'dmaker' }
     end
 
+    context "when a numbered-page enhanced dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_000068de.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker_enhanced' }
+    end
+
     context "when a front-matter master file is instantiated" do
       subject { Nyudl::Text::Filename.new('mss092_ref14-fr02m.tif', 'mss092_ref14') }
       its(:role) { should == 'master' }
@@ -342,6 +370,11 @@ describe Nyudl::Text::Filename do
       its(:role) { should == 'dmaker' }
     end
 
+    context "when a front-matter enhanced dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14-fr02de.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker_enhanced' }
+    end
+
     context "when a back-matter master file is instantiated" do
       subject { Nyudl::Text::Filename.new('mss092_ref14_bk02m.tif', 'mss092_ref14') }
       its(:role) { should == 'master' }
@@ -350,6 +383,11 @@ describe Nyudl::Text::Filename do
     context "when a back-matter dmaker file is instantiated" do
       subject { Nyudl::Text::Filename.new('mss092_ref14_bk02d.tif', 'mss092_ref14') }
       its(:role) { should == 'dmaker' }
+    end
+
+    context "when a back-matter enhanced dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_bk02de.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker_enhanced' }
     end
 
     context "when a target file is instantiated" do
@@ -394,6 +432,16 @@ describe Nyudl::Text::Filename do
       its(:role) { should == 'dmaker' }
     end
 
+    context "when a front-matter-oversized-with-hyphen enhanced dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14-fr01_1_01de.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker_enhanced' }
+    end
+
+    context "when a front-matter-oversized-with-underscore enhanced dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_fr01_1_01de.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker_enhanced' }
+    end
+
     context "when a back-matter-oversized-with-underscore master file is instantiated" do
       subject { Nyudl::Text::Filename.new('mss092_ref14_bk01_1_1m.tif', 'mss092_ref14') }
       its(:role) { should == 'master' }
@@ -408,6 +456,11 @@ describe Nyudl::Text::Filename do
     context "when a correct front-matter filename dmaker file is instantiated" do
       subject { Nyudl::Text::Filename.new('mss092_ref14_afr01_d.tif', 'mss092_ref14') }
       its(:role) { should == 'dmaker' }
+    end
+
+    context "when a correct front-matter filename enhanced dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_afr01_de.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker_enhanced' }
     end
 
     context "when a correct back-matter filename master file is instantiated" do
@@ -429,6 +482,11 @@ describe Nyudl::Text::Filename do
     context "when a correct back-matter filename dmaker file is instantiated" do
       subject { Nyudl::Text::Filename.new('mss092_ref14_zbk01_z08_d.tif', 'mss092_ref14') }
       its(:role) { should == 'dmaker' }
+    end
+
+    context "when a correct back-matter filename dmaker file is instantiated" do
+      subject { Nyudl::Text::Filename.new('mss092_ref14_zbk01_z08_de.tif', 'mss092_ref14') }
+      its(:role) { should == 'dmaker_enhanced' }
     end
 
     context "when a correct target file is instantiated" do
