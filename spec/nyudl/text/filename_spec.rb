@@ -227,7 +227,7 @@ describe Nyudl::Text::Filename do
   end
 
 
-  # this is because, for some reason, Ruby can correctly convert numbers 0-7 
+  # this is because, for some reason, Ruby can correctly convert numbers 0-7
   # to_i if they have a leading zero, but hit 08 and all bets are off.
   # probably b/c 00 -> 07 Octal are valid, but 08 is not valid Octal and
   # would be written 010.  Need to implement fix to strip leading zeros...
@@ -308,6 +308,9 @@ describe Nyudl::Text::Filename do
     "mss092_ref14_zbk01_m.tif"    => "mss092_ref14_zbk01_m.tif",
     "mss092_ref14_zbk01_d.tif"    => "mss092_ref14_zbk01_d.tif",
     "mss092_ref14_zbk01_de.tif"   => "mss092_ref14_zbk01_de.tif",
+
+    "mss092_ref14_n000068_m.dng"  => "mss092_ref14_n000068_m.dng",
+    "mss092_ref14_zbk01_m.dng"    => "mss092_ref14_zbk01_m.dng",
 
     "mss092_ref14_n000068_z08_m.tif"  => "mss092_ref14_n000068_z08_m.tif",
     "mss092_ref14_n000068_z08_d.tif"  => "mss092_ref14_n000068_z08_d.tif",
@@ -496,4 +499,3 @@ describe Nyudl::Text::Filename do
 
   end
 end
-
