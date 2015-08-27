@@ -219,7 +219,7 @@ describe Nyudl::Text::Filename do
     it { should_not be_rename }
   end
 
-  context "when eoc.csv file is found" do
+  context "when <DIGID>_eoc.csv file is found" do
     subject { Nyudl::Text::Filename.new('mss092_ref14_eoc.csv', 'mss092_ref14') }
 
     it { should be_recognized }
@@ -228,6 +228,13 @@ describe Nyudl::Text::Filename do
 
   context "when EOC.csv file is found" do
     subject { Nyudl::Text::Filename.new('flubba_bubba_EOC.csv', 'mss092_ref14') }
+
+    it { should be_recognized }
+    it { should_not be_rename }
+  end
+
+  context "when <SOMETHING>_eoc.csv file is found" do
+    subject { Nyudl::Text::Filename.new('flubba_bubba_eoc.csv', 'mss092_ref14') }
 
     it { should be_recognized }
     it { should_not be_rename }
