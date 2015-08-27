@@ -74,6 +74,11 @@ module Nyudl
           @newname = @fname
           @role = 'eoc'
 
+        when /eoc.csv\z/
+          # noop
+          @newname = @fname
+          @role = 'eoc'
+
         when /EOC\.xls\z/
           # noop
           @newname = @fname
