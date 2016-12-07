@@ -94,7 +94,7 @@ describe Nyudl::Text::Errors do
     context "before errors are added" do
       subject(:e) { Nyudl::Text::Errors.new() }
       it "returns true" do
-        e.empty?.should be_true
+        e.empty?.should be true
       end
     end
 
@@ -107,7 +107,7 @@ describe Nyudl::Text::Errors do
       }
 
       it "returns false" do
-        e.empty?.should be_false
+        e.empty?.should be false
       end
     end
   end

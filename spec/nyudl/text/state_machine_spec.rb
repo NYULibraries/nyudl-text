@@ -9,12 +9,12 @@ describe Text::StateMachine do
     end
 
     it "accepts transition to fm" do
-      sm.found_fm.should be_true
+      sm.found_fm.should be true
       sm.should be_fm
     end
 
     it "accepts transition to np" do
-      sm.found_np.should be_true
+      sm.found_np.should be true
       sm.should be_np
     end
 
@@ -23,12 +23,12 @@ describe Text::StateMachine do
     end
 
     it "accepts transition to in" do
-      sm.found_in.should be_true
+      sm.found_in.should be true
       sm.should be_in
     end
 
     it "accepts transition to ov" do
-      sm.found_ov.should be_true
+      sm.found_ov.should be true
       sm.should be_ov
     end
 
@@ -45,32 +45,32 @@ describe Text::StateMachine do
     end
 
     it "accepts transition to fm" do
-      sm.found_fm.should be_true
+      sm.found_fm.should be true
       sm.should be_fm
     end
 
     it "accepts transition to np" do
-      sm.found_np.should be_true
+      sm.found_np.should be true
       sm.should be_np
     end
 
     it "accepts transition to bm" do
-      sm.found_bm.should be_true
+      sm.found_bm.should be true
       sm.should be_bm
     end
 
     it "accepts transition to in" do
-      sm.found_in.should be_true
+      sm.found_in.should be true
       sm.should be_in
     end
 
     it "accepts transition to ov" do
-      sm.found_ov.should be_true
+      sm.found_ov.should be true
       sm.should be_ov
     end
 
     it "accepts transition to end" do
-      sm.found_end.should be_true
+      sm.found_end.should be true
       sm.should be_end
     end
   end
@@ -87,27 +87,27 @@ describe Text::StateMachine do
     end
 
     it "accepts transition to np" do
-      sm.found_np.should be_true
+      sm.found_np.should be true
       sm.should be_np
     end
 
     it "accepts transition to bm" do
-      sm.found_bm.should be_true
+      sm.found_bm.should be true
       sm.should be_bm
     end
 
     it "accepts transition to in" do
-      sm.found_in.should be_true
+      sm.found_in.should be true
       sm.should be_in
     end
 
     it "accepts transition to ov" do
-      sm.found_ov.should be_true
+      sm.found_ov.should be true
       sm.should be_ov
     end
 
     it "accepts transition to end" do
-      sm.found_end.should be_true
+      sm.found_end.should be true
       sm.should be_end
     end
   end
@@ -128,22 +128,22 @@ describe Text::StateMachine do
     end
 
     it "accepts transition to bm" do
-      sm.found_bm.should be_true
+      sm.found_bm.should be true
       sm.should be_bm
     end
 
     it "accepts transition to in" do
-      sm.found_in.should be_true
+      sm.found_in.should be true
       sm.should be_in
     end
 
     it "accepts transition to ov" do
-      sm.found_ov.should be_true
+      sm.found_ov.should be true
       sm.should be_ov
     end
 
     it "accepts transition to end" do
-      sm.found_end.should be_true
+      sm.found_end.should be true
       sm.should be_end
     end
   end
@@ -156,32 +156,32 @@ describe Text::StateMachine do
     end
 
     it "accepts transition to fm" do
-      sm.found_fm.should be_true
+      sm.found_fm.should be true
       sm.should be_fm
     end
 
     it "accepts transition to np" do
-      sm.found_np.should be_true
+      sm.found_np.should be true
       sm.should be_np
     end
 
     it "accepts transition to bm" do
-      sm.found_bm.should be_true
+      sm.found_bm.should be true
       sm.should be_bm
     end
 
     it "accepts transition to in" do
-      sm.found_in.should be_true
+      sm.found_in.should be true
       sm.should be_in
     end
 
     it "accepts transition to ov" do
-      sm.found_ov.should be_true
+      sm.found_ov.should be true
       sm.should be_ov
     end
 
     it "accepts transition to end" do
-      sm.found_end.should be_true
+      sm.found_end.should be true
       sm.should be_end
     end
   end
@@ -194,32 +194,32 @@ describe Text::StateMachine do
     end
 
     it "accepts transition to fm" do
-      sm.found_fm.should be_true
+      sm.found_fm.should be true
       sm.should be_fm
     end
 
     it "accepts transition to np" do
-      sm.found_np.should be_true
+      sm.found_np.should be true
       sm.should be_np
     end
 
     it "accepts transition to bm" do
-      sm.found_bm.should be_true
+      sm.found_bm.should be true
       sm.should be_bm
     end
 
     it "accepts transition to in" do
-      sm.found_in.should be_true
+      sm.found_in.should be true
       sm.should be_in
     end
 
     it "accepts transition to ov" do
-      sm.found_ov.should be_true
+      sm.found_ov.should be true
       sm.should be_ov
     end
 
     it "accepts transition to end" do
-      sm.found_end.should be_true
+      sm.found_end.should be true
       sm.should be_end
     end
   end
@@ -271,17 +271,17 @@ end
   end
 
   it "should initialize in the start state" do
-    expect(sm.start?).to be_true
+    expect(sm.start?).to be true
   end
 
   it "should allow transition from start to front matter" do
-    expect(sm.found_fm).to be_true
-    expect(sm.fm?).to be_true
+    expect(sm.found_fm).to be true
+    expect(sm.fm?).to be true
   end
 
  # it "should throw and exception when transitioning from start to end" do
  #   expect(@sm.found_end).exception.to == 
- #   expect(@sm.end?).to be_true
+ #   expect(@sm.end?).to be true
  # end
 
 

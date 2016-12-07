@@ -75,7 +75,7 @@ describe Nyudl::Text::Base do
       end
       it "returns true if valid and called after #analyze" do
         text.analyze
-        text.valid?.should be_true
+        text.valid?.should be true
       end
     end
 
@@ -83,7 +83,7 @@ describe Nyudl::Text::Base do
       subject(:text) { stub_recognized_text }
       it "returns false if renaming required and called after #analyze" do
         text.analyze
-        text.valid?.should be_false
+        text.valid?.should be false
       end
     end
   end
@@ -196,7 +196,7 @@ describe Nyudl::Text::Base do
       subject (:text) { stub_valid_text }
       it "returns false" do
         text.analyze
-        text.rename?.should be_false
+        text.rename?.should be false
       end
     end
 
@@ -204,7 +204,7 @@ describe Nyudl::Text::Base do
       subject (:text) { stub_recognized_text }
       it "returns true" do
         text.analyze
-        text.rename?.should be_true
+        text.rename?.should be true
       end
     end
 
@@ -212,7 +212,7 @@ describe Nyudl::Text::Base do
       subject (:text) { stub_unrecognized_text }
       it "returns true" do
         text.analyze
-        text.rename?.should be_true
+        text.rename?.should be true
       end
     end
 
@@ -227,13 +227,13 @@ describe Nyudl::Text::Base do
       end
       it "does nothing when called after #analyze" do
         text.analyze
-        text.valid?.should be_true
-        text.rename?.should be_false
+        text.valid?.should be true
+        text.rename?.should be false
         text.errors.should be_empty
         text.rename!
         text.analyze
-        text.valid?.should be_true
-        text.rename?.should be_false
+        text.valid?.should be true
+        text.rename?.should be false
         text.errors.should be_empty
       end
     end
@@ -242,14 +242,14 @@ describe Nyudl::Text::Base do
       subject(:text) { stub_recognized_text }
       it "renames the files" do
         text.analyze
-        text.valid?.should be_false
-        text.rename?.should be_true
+        text.valid?.should be false
+        text.rename?.should be true
         text.errors.should be_empty
         text.rename!
-        text.analyzed?.should be_false
+        text.analyzed?.should be false
         text.analyze
-        text.valid?.should be_true
-        text.rename?.should be_false
+        text.valid?.should be true
+        text.rename?.should be false
         text.errors.should be_empty
       end
     end
@@ -258,8 +258,8 @@ describe Nyudl::Text::Base do
       subject(:text) { stub_unrecognized_text }
       it "raises an exception" do
         text.analyze
-        text.valid?.should be_false
-        text.rename?.should be_true
+        text.valid?.should be false
+        text.rename?.should be true
         text.errors.should_not be_empty
         expect {text.rename!}.to raise_error RuntimeError
       end
@@ -269,8 +269,8 @@ describe Nyudl::Text::Base do
       subject(:text) { stub_collision_text }
       it "raises an exception the files" do
         text.analyze
-        text.valid?.should be_false
-        text.rename?.should be_true
+        text.valid?.should be false
+        text.rename?.should be true
         text.errors.should be_empty
         expect {text.rename!}.to raise_error RuntimeError
       end
