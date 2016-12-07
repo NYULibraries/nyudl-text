@@ -5,6 +5,7 @@ rescue LoadError
   puts 'Coverage disabled, enable by installing simplecov'
 end
 
+require 'rspec/its'
 require 'fakefs/spec_helpers'
 require 'fileutils'
 
