@@ -1,4 +1,5 @@
 require 'spec_helper'
+require "nyudl/text/state_machine"
 
 describe Text::StateMachine do
   describe "start state transitions" do
