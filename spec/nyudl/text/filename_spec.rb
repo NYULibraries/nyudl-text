@@ -283,6 +283,7 @@ describe Nyudl::Text::Filename do
   prefix = 'mss092_ref14'
   {
     "mss092_ref14_000068m.tif"  => "mss092_ref14_n000068_m.tif",
+    "mss092_ref14_000068o.tif" => "mss092_ref14_n000068_o.tif",
     "mss092_ref14_000068d.tif"  => "mss092_ref14_n000068_d.tif",
     "mss092_ref14_000068de.tif" => "mss092_ref14_n000068_de.tif",
     "mss092_ref14-fr01d.tif"    => "mss092_ref14_afr01_d.tif",
@@ -294,13 +295,16 @@ describe Nyudl::Text::Filename do
     "mss092_ref14_bk01de.tif"   => "mss092_ref14_zbk01_de.tif",
 
     "mss092_ref14_000068_1m.tif" => "mss092_ref14_n000068_z01_m.tif",
+    "mss092_ref14_000068_1o.tif" => "mss092_ref14_n000068_z01_o.tif",
     "mss092_ref14-fr01_1d.tif"   => "mss092_ref14_afr01_z01_d.tif",
     "mss092_ref14_fr01_1d.tif"   => "mss092_ref14_afr01_z01_d.tif",
     "mss092_ref14-fr01_1de.tif"  => "mss092_ref14_afr01_z01_de.tif",
     "mss092_ref14_fr01_1de.tif"  => "mss092_ref14_afr01_z01_de.tif",
     "mss092_ref14_bk01_1m.tif"   => "mss092_ref14_zbk01_z01_m.tif",
+    "mss092_ref14_bk01_1o.tif"   => "mss092_ref14_zbk01_z01_o.tif",
 
     "mss092_ref14_000068_1_1m.tif"  => "mss092_ref14_n000068_z01_z01_m.tif",
+    "mss092_ref14_000068_1_1o.tif"  => "mss092_ref14_n000068_z01_z01_o.tif",
     "mss092_ref14_000068_1_1d.tif"  => "mss092_ref14_n000068_z01_z01_d.tif",
     "mss092_ref14_000068_1_1de.tif" => "mss092_ref14_n000068_z01_z01_de.tif",
     "mss092_ref14-fr01_1_01d.tif"   => "mss092_ref14_afr01_z01_z01_d.tif",
@@ -308,6 +312,7 @@ describe Nyudl::Text::Filename do
     "mss092_ref14-fr01_1_01de.tif"  => "mss092_ref14_afr01_z01_z01_de.tif",
     "mss092_ref14_fr01_1_01de.tif"  => "mss092_ref14_afr01_z01_z01_de.tif",
     "mss092_ref14_bk01_1_1m.tif"    => "mss092_ref14_zbk01_z01_z01_m.tif",
+    "mss092_ref14_bk01_1_1o.tif"    => "mss092_ref14_zbk01_z01_z01_o.tif",
     "mss092_ref14_bk01_1_1d.tif"    => "mss092_ref14_zbk01_z01_z01_d.tif",
     "mss092_ref14_bk01_1_1de.tif"    => "mss092_ref14_zbk01_z01_z01_de.tif",
 
@@ -315,11 +320,13 @@ describe Nyudl::Text::Filename do
     "mss092_ref14_target.tif"       => "mss092_ref14_ztarget_m.tif",
 
     "mss092_ref14_n000068_m.tif"  => "mss092_ref14_n000068_m.tif",
+    "mss092_ref14_n000068_o.tif"  => "mss092_ref14_n000068_o.tif",
     "mss092_ref14_n000068_d.tif"  => "mss092_ref14_n000068_d.tif",
     "mss092_ref14_n000068_de.tif" => "mss092_ref14_n000068_de.tif",
     "mss092_ref14_afr01_d.tif"    => "mss092_ref14_afr01_d.tif",
     "mss092_ref14_afr01_de.tif"   => "mss092_ref14_afr01_de.tif",
     "mss092_ref14_zbk01_m.tif"    => "mss092_ref14_zbk01_m.tif",
+    "mss092_ref14_zbk01_o.tif"    => "mss092_ref14_zbk01_o.tif",
     "mss092_ref14_zbk01_d.tif"    => "mss092_ref14_zbk01_d.tif",
     "mss092_ref14_zbk01_de.tif"   => "mss092_ref14_zbk01_de.tif",
 
@@ -327,6 +334,7 @@ describe Nyudl::Text::Filename do
     "mss092_ref14_zbk01_m.dng"    => "mss092_ref14_zbk01_m.dng",
 
     "mss092_ref14_n000068_z08_m.tif"  => "mss092_ref14_n000068_z08_m.tif",
+    "mss092_ref14_n000068_z08_o.tif"  => "mss092_ref14_n000068_z08_o.tif",
     "mss092_ref14_n000068_z08_d.tif"  => "mss092_ref14_n000068_z08_d.tif",
     "mss092_ref14_n000068_z08_de.tif" => "mss092_ref14_n000068_z08_de.tif",
     "mss092_ref14_zbk01_z08_m.tif"    => "mss092_ref14_zbk01_z08_m.tif",
@@ -334,9 +342,11 @@ describe Nyudl::Text::Filename do
     "mss092_ref14_afr01_z08_de.tif"   => "mss092_ref14_afr01_z08_de.tif",
 
     "mss092_ref14_n000068_z08_z08_m.tif" => "mss092_ref14_n000068_z08_z08_m.tif",
+    "mss092_ref14_n000068_z08_z08_o.tif" => "mss092_ref14_n000068_z08_z08_o.tif",
     "mss092_ref14_afr01_z08_z08_d.tif"   => "mss092_ref14_afr01_z08_z08_d.tif",
     "mss092_ref14_afr01_z08_z08_de.tif"  => "mss092_ref14_afr01_z08_z08_de.tif",
-    "mss092_ref14_zbk01_z08_z08_m.tif"   => "mss092_ref14_zbk01_z08_z08_m.tif"
+    "mss092_ref14_zbk01_z08_z08_m.tif"   => "mss092_ref14_zbk01_z08_z08_m.tif",
+    "mss092_ref14_zbk01_z08_z08_o.tif"   => "mss092_ref14_zbk01_z08_z08_o.tif"
   }.each_pair do |k,v|
     context "when using known filename patterns" do
       subject(:fname) { Nyudl::Text::Filename.new(k, prefix) }
